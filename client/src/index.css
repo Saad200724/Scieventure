@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom responsive utilities */
+@layer utilities {
+  /* Extra small screens */
+  .xs\:block {
+    display: block;
+  }
+  .xs\:inline-flex {
+    display: inline-flex;
+  }
+  .xs\:hidden {
+    display: none;
+  }
+  .xs\:flex {
+    display: flex;
+  }
+  .xs\:w-full {
+    width: 100%;
+  }
+  .xs\:w-auto {
+    width: auto;
+  }
+}
+
+:root {
+  --background: 0 0% 95.3%;
+  --foreground: 20 14.3% 4.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 217 91% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 162 94% 40%;
+  --secondary-foreground: 355 100% 97%;
+  --accent: 36 93% 52%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 217 91% 53%;
+  --radius: 0.5rem;
+  
+  /* Chart Colors */
+  --chart-1: 217 91% 53%;
+  --chart-2: 162 94% 40%;
+  --chart-3: 36 93% 52%;
+  --chart-4: 262 83% 58%;
+  --chart-5: 0 84% 60%;
+  
+  /* Sidebar Colors */
+  --sidebar-background: 222 47% 11%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: 217 91% 53%;
+  --sidebar-primary-foreground: 210 40% 98%;
+  --sidebar-accent: 36 93% 52%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 217 33% 17%;
+  --sidebar-ring: 215 20.2% 65.1%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 217 91% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 162 94% 40%;
+  --secondary-foreground: 355 100% 97%;
+  --accent: 36 93% 52%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 217 91% 53%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+.progress-bar {
+  @apply h-2 rounded overflow-hidden bg-gray-200;
+}
+
+.progress-value {
+  @apply h-full bg-primary transition-all duration-300 ease-in-out;
+}
+
+.badge-icon {
+  @apply relative inline-flex items-center justify-center;
+}
+
+.badge-icon::after {
+  content: '';
+  @apply absolute -top-0.5 -right-0.5 w-2 h-2 bg-accent rounded-full;
+}
+
+.bengali {
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
