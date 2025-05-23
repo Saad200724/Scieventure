@@ -1,0 +1,14 @@
+This is a test file for SciVenture's Curio chatbot.
+
+This file is meant to test the document processing capabilities of the application.
+
+Curio should be able to analyze this text file and provide insights about its content.
+
+Science is the systematic study of the structure and behavior of the physical and natural world through observation and experiment.
+
+Key fields of science include:
+1. Physics
+2. Chemistry
+3. Biology
+4. Astronomy
+5. Geology
