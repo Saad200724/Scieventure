@@ -1,6 +1,13 @@
 # SciVenture: Interactive Science Learning Platform
 
 SciVenture is an engaging educational platform designed to make science learning interactive and fun. This application uses Supabase for both authentication and database functionality to create a seamless user experience.
+![image](https://github.com/user-attachments/assets/8bc3da9d-ace9-47da-ad3e-440005c077e7)
+![image](https://github.com/user-attachments/assets/a22fd8f0-354c-4aca-a72a-fb32bf1836d3)
+![image](https://github.com/user-attachments/assets/0b1f9ad5-b9b6-47c9-a047-9cee05f827e4)
+![image](https://github.com/user-attachments/assets/ef632539-3000-4668-8f08-3b3a2098d724)
+![image](https://github.com/user-attachments/assets/6b6f75d4-19f2-4afc-b2e0-57bf0d6be665)
+
+# And much more, run this.
 
 ## Features
 
