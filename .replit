@@ -25,8 +25,13 @@ args = "npm run dev"
 waitForPort = 5000
 
 [deployment]
-run = ["sh", "-c", "cd SciVenture && npm install && npm run dev"]
+run = ["npm", "run", "start"]
+deploymentTarget = "autoscale"
+build = ["npm", "run", "build"]
 
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[agent]
+expertMode = true
