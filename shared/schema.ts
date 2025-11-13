@@ -36,6 +36,8 @@ export const modules = pgTable("modules", {
   rating: integer("rating").default(0),
   studentCount: integer("student_count").default(0),
   content: jsonb("content"),
+  language: text("language").default("en"),
+  educationLevel: text("education_level"),
 });
 
 export const insertModuleSchema = createInsertSchema(modules).pick({
@@ -44,6 +46,8 @@ export const insertModuleSchema = createInsertSchema(modules).pick({
   subject: true,
   thumbnail: true,
   content: true,
+  language: true,
+  educationLevel: true,
 });
 
 // User Progress
@@ -119,6 +123,8 @@ export const resources = pgTable("resources", {
   downloadCount: integer("download_count").default(0),
   filePath: text("file_path").notNull(),
   thumbnail: text("thumbnail"),
+  language: text("language").default("en"),
+  educationLevel: text("education_level"),
 });
 
 export const insertResourceSchema = createInsertSchema(resources).pick({
@@ -129,6 +135,8 @@ export const insertResourceSchema = createInsertSchema(resources).pick({
   tags: true,
   filePath: true,
   thumbnail: true,
+  language: true,
+  educationLevel: true,
 });
 
 // Chat Messages
