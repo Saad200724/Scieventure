@@ -1,7 +1,13 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
-// Initialize the Google Generative AI with the API key
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_API_KEY || process.env.GOOGLE_API_KEY || '');
+// Initialize the Google Generative AI with the API key from environment variables
+const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
+
+if (!apiKey) {
+  console.warn('VITE_GOOGLE_API_KEY is not set. Add it to your .env file.');
+}
+
+const genAI = new GoogleGenerativeAI(apiKey);
 
 // Get the Gemini Pro model
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
