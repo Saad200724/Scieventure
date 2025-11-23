@@ -81,10 +81,11 @@ export async function generateCurioResponse(
     }
 
     // Create chat session with proper history
+    // Set max output limit: 2500 tokens (safe range - complete answers without cutoff)
     const chat = model.startChat({
       history: history.length > 0 ? history : undefined,
       generationConfig: {
-        maxOutputTokens: 4096,
+        maxOutputTokens: 2500,
         temperature: 0.7,
       },
     });
