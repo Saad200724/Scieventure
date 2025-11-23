@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   // Fetch user data from API
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading } = useQuery<any>({
     queryKey: [`/api/users/${userId}`],
   });
 

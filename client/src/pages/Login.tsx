@@ -59,9 +59,18 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       }
     } catch (error: any) {
       setIsLoading(false);
+      
+      // Check if error is due to email verification
+      const errorMessage = error.message || error.toString() || "Please check your credentials and try again";
+      let description = errorMessage;
+      
+      if (errorMessage.includes("invalid") || errorMessage.includes("credentials")) {
+        description = "Invalid email or password. If you just registered, please check your email for a verification link and click it to activate your account.";
+      }
+      
       toast({
         title: "Login failed",
-        description: error.message || "Please check your credentials and try again",
+        description: description,
         variant: "destructive",
       });
     }

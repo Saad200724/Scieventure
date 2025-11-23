@@ -65,18 +65,21 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
       setIsLoading(false);
       toast({
         title: "Registration successful",
-        description: "Your account has been created. Please check your email for verification.",
+        description: "Please check your email to verify your account before signing in.",
       });
       
-      // Call the onRegisterSuccess callback if provided
-      if (onRegisterSuccess) {
-        onRegisterSuccess();
-        // Redirect to login page after successful registration
-        setLocation('/login');
-      } else {
-        // Fallback if callback not provided
-        setLocation('/login');
-      }
+      // Show a verification notice and redirect to login after a delay
+      setTimeout(() => {
+        // Call the onRegisterSuccess callback if provided
+        if (onRegisterSuccess) {
+          onRegisterSuccess();
+          // Redirect to login page after successful registration
+          setLocation('/login');
+        } else {
+          // Fallback if callback not provided
+          setLocation('/login');
+        }
+      }, 2000);
     } catch (error: any) {
       setIsLoading(false);
       toast({
