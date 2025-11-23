@@ -48,10 +48,13 @@ export const queryClient = new QueryClient({
       refetchInterval: false,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
+      gcTime: 1000 * 60 * 60 * 24, // Keep cache for 24 hours
       retry: false,
+      networkMode: 'always',
     },
     mutations: {
       retry: false,
+      networkMode: 'always',
     },
   },
 });

@@ -63,9 +63,10 @@ export async function deepResearch(text: string): Promise<string> {
 
     const response = result.response;
     return response.text();
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     console.error("Error in deepResearch:", error);
-    throw new Error(`Failed to process research request: ${error.message}`);
+    throw new Error(`Failed to process research request: ${errorMessage}`);
   }
 }
 
@@ -94,9 +95,10 @@ export async function simplifyWithGemini(text: string): Promise<string> {
 
     const response = result.response;
     return response.text();
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     console.error("Error in simplifyWithGemini:", error);
-    throw new Error(`Failed to simplify text: ${error.message}`);
+    throw new Error(`Failed to simplify text: ${errorMessage}`);
   }
 }
 
@@ -131,9 +133,10 @@ export async function analyzeWithGemini(text: string): Promise<string> {
 
     const response = result.response;
     return response.text();
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     console.error("Error in analyzeWithGemini:", error);
-    throw new Error(`Failed to analyze research paper: ${error.message}`);
+    throw new Error(`Failed to analyze research paper: ${errorMessage}`);
   }
 }
 
@@ -174,8 +177,9 @@ export async function translateWithGemini(
 
     const response = result.response;
     return response.text();
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     console.error("Error in translateWithGemini:", error);
-    throw new Error(`Failed to translate text: ${error.message}`);
+    throw new Error(`Failed to translate text: ${errorMessage}`);
   }
 }

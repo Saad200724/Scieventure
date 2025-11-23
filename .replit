@@ -34,6 +34,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 41835
+externalPort = 3002
+
+[[ports]]
 localPort = 42805
 externalPort = 3000
 
@@ -43,3 +47,8 @@ externalPort = 3001
 
 [agent]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+VITE_GOOGLE_API_KEY = "AIzaSyA5WC-FBNaqP0G_LvPQSdlWfBqChN9MxiU"

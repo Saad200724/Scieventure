@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Switch, Route, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -14,15 +14,17 @@ import Landing from "@/pages/Landing";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
-import AIAssistant from "@/pages/AIAssistant";
 import Projects from "@/pages/Projects";
 import Resources from "@/pages/Resources";
-import ModuleDetail from "@/pages/ModuleDetail";
 import Modules from "@/pages/Modules";
 import Community from "@/pages/Community";
 import OfflineContent from "@/pages/OfflineContent";
 import { ROUTES } from "@/lib/constants";
 import { supabase, getSession } from "@/lib/supabase";
+
+// Lazy load heavy pages to improve initial load time
+const AIAssistant = lazy(() => import("@/pages/AIAssistant"));
+const ModuleDetail = lazy(() => import("@/pages/ModuleDetail"));
 
 function App() {
   // Auth state
@@ -159,7 +161,13 @@ function App() {
                 </Route>
                 <Route path={ROUTES.aiAssistant}>
                   {() => (
-                    isAuthenticated ? <AIAssistant /> : <Redirect to="/login" />
+                    isAuthenticated ? (
+                      <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading AI Assistant...</div>}>
+                        <AIAssistant />
+                      </Suspense>
+                    ) : (
+                      <Redirect to="/login" />
+                    )
                   )}
                 </Route>
                 <Route path={ROUTES.projects}>
@@ -174,7 +182,13 @@ function App() {
                 </Route>
                 <Route path={ROUTES.moduleDetail}>
                   {(params) => (
-                    isAuthenticated ? <ModuleDetail /> : <Redirect to="/login" />
+                    isAuthenticated ? (
+                      <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading Module...</div>}>
+                        <ModuleDetail />
+                      </Suspense>
+                    ) : (
+                      <Redirect to="/login" />
+                    )
                   )}
                 </Route>
                 <Route path={ROUTES.community}>
