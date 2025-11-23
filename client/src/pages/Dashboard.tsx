@@ -29,21 +29,6 @@ const Dashboard: React.FC = () => {
     }
     
     fetchSupabaseUser();
-    
-    // Set up auth listener
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
-          setSupabaseUser(session.user);
-        }
-      }
-    );
-    
-    return () => {
-      if (authListener && authListener.subscription) {
-        authListener.subscription.unsubscribe();
-      }
-    };
   }, []);
 
   // Fetch user data from API
