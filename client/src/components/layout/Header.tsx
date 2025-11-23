@@ -142,22 +142,7 @@ const Header: React.FC = () => {
             </div>
           </Link>
 
-          {/* Mobile Layout: Menu, Language, Profile */}
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden menu-button p-1"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-5 w-5 text-gray-800 dark:text-gray-200" />
-            ) : (
-              <Menu className="h-5 w-5 text-gray-800 dark:text-gray-200" />
-            )}
-          </Button>
-          
+          {/* Mobile Layout: Language, Profile, Menu (rightmost) */}
           {/* Language Toggle - Mobile visible */}
           <div className="md:hidden">
             <LanguageToggle className="p-1" />
@@ -171,6 +156,21 @@ const Header: React.FC = () => {
                 'S'}
             </div>
           </Link>
+
+          {/* Mobile Menu Button - Rightmost */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden menu-button p-1"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+            ) : (
+              <Menu className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+            )}
+          </Button>
 
           {/* Language Toggle - Desktop visible */}
           <div className="hidden md:inline-flex">
