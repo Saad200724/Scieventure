@@ -13,15 +13,24 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Authentication helper functions
 export const signUp = async (email: string, password: string, userData?: Record<string, any>) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: userData
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: userData
+      }
+    });
+    
+    if (error) {
+      console.error('Supabase signup error:', error);
     }
-  });
-  
-  return { data, error };
+    
+    return { data, error };
+  } catch (err) {
+    console.error('Signup exception:', err);
+    throw err;
+  }
 };
 
 export const signIn = async (email: string, password: string) => {
