@@ -17,6 +17,7 @@ import Projects from "@/pages/Projects";
 import Resources from "@/pages/Resources";
 import Modules from "@/pages/Modules";
 import Community from "@/pages/Community";
+import Curio from "@/pages/Curio";
 import OfflineContent from "@/pages/OfflineContent";
 import { ROUTES } from "@/lib/constants";
 import { supabase, getSession } from "@/lib/supabase";
@@ -165,6 +166,11 @@ function App() {
                 <Route path={ROUTES.resources}>
                   {() => (
                     isAuthenticated ? <Resources /> : <Redirect to="/login" />
+                  )}
+                </Route>
+                <Route path={ROUTES.curio}>
+                  {() => (
+                    isAuthenticated ? <Curio /> : <Redirect to="/login" />
                   )}
                 </Route>
                 <Route path={ROUTES.moduleDetail}>

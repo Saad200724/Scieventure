@@ -49,6 +49,7 @@ export const NAV_ITEMS = [
   { labelEn: 'Home', labelBn: 'হোম', path: '/home' },
   { labelEn: 'Modules', labelBn: 'মডিউল', path: '/modules' },
   { labelEn: 'Projects', labelBn: 'প্রকল্প', path: '/projects' },
+  { labelEn: 'Curio', labelBn: 'কিউরিও', path: '/curio' },
   { labelEn: 'Community', labelBn: 'কমিউনিটি', path: '/community' },
   { labelEn: 'Resources', labelBn: 'সংস্থান', path: '/resources' },
 ];
@@ -68,7 +69,7 @@ export const ROUTES = {
   projects: '/projects',
   projectDetail: '/projects/:id',
   resources: '/resources',
-  aiAssistant: '/ai-assistant',
+  curio: '/curio',
   community: '/community',
   profile: '/profile',
   login: '/login',

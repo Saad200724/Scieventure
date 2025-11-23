@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import multer from "multer";
+import { generateCurioResponse, type CurioMessage } from "./ai";
 import {
   insertUserSchema,
   insertModuleSchema,
@@ -492,21 +493,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.post("/api/chat", async (req, res) => {
     try {
-      const messageData = insertChatMessageSchema.parse(req.body);
+      const { userId, message, conversationHistory } = req.body;
       
-      // Placeholder response - no AI functionality
-      const response = "This feature is currently being configured. Please check back soon!";
+      if (!userId || !message) {
+        return res.status(400).json({ message: "User ID and message are required" });
+      }
       
+      // Get conversation history to maintain context
+      const history: CurioMessage[] = (conversationHistory || []).map((msg: any) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
+      
+      // Add current user message
+      history.push({
+        role: "user",
+        content: message,
+      });
+      
+      // Generate response from Gemini
+      const response = await generateCurioResponse(history);
+      
+      // Store the conversation
       const chatMessage = await storage.createChatMessage({
-        ...messageData,
-        response
+        userId,
+        message,
+        response,
       });
       
       res.status(201).json({
         ...chatMessage,
-        bengali_translation: null
+        aiResponse: response,
       });
     } catch (error) {
+      console.error("Chat error:", error);
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid message data", errors: error.errors });
       }

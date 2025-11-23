@@ -2,7 +2,6 @@ import React from 'react';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturedModules from '@/components/modules/FeaturedModules';
 import CollaborativeProjects from '@/components/projects/CollaborativeProjects';
-import AIAssistantSection from '@/components/ai/AIAssistantSection';
 import FeaturedResources from '@/components/resources/FeaturedResources';
 import CommunitySection from '@/components/community/CommunitySection';
 import { useLanguage } from '@/providers/LanguageProvider';
@@ -25,7 +24,6 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
           <FeaturedModules userId={1} limit={4} />
           <CollaborativeProjects limit={3} />
-          <AIAssistantSection />
           <FeaturedResources limit={2} />
           <CommunitySection />
         </div>
