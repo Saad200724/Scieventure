@@ -8,7 +8,6 @@ import { LanguageProvider } from "@/providers/LanguageProvider";
 import NotFound from "@/pages/not-found";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import CurioBot from "@/components/ai/CurioBot";
 import Home from "@/pages/Home";
 import Landing from "@/pages/Landing";
 import Login from "@/pages/Login";
@@ -23,7 +22,6 @@ import { ROUTES } from "@/lib/constants";
 import { supabase, getSession } from "@/lib/supabase";
 
 // Lazy load heavy pages to improve initial load time
-const AIAssistant = lazy(() => import("@/pages/AIAssistant"));
 const ModuleDetail = lazy(() => import("@/pages/ModuleDetail"));
 
 function App() {
@@ -33,12 +31,11 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [location] = useLocation();
   
-  // Check if current page is a public page (landing, login, register, AI assistant)
+  // Check if current page is a public page (landing, login, register)
   const isPublicPage = 
     location === "/" || 
     location === "/login" || 
-    location === "/register" ||
-    location === "/ai-assistant";
+    location === "/register";
 
   // Check for an existing session when the app loads (non-blocking)
   useEffect(() => {
@@ -160,13 +157,6 @@ function App() {
                     isAuthenticated ? <Modules /> : <Redirect to="/login" />
                   )}
                 </Route>
-                <Route path={ROUTES.aiAssistant}>
-                  {() => (
-                    <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading AI Assistant...</div>}>
-                      <AIAssistant />
-                    </Suspense>
-                  )}
-                </Route>
                 <Route path={ROUTES.projects}>
                   {() => (
                     isAuthenticated ? <Projects /> : <Redirect to="/login" />
@@ -208,9 +198,6 @@ function App() {
             
             {/* Only show Footer on authenticated pages */}
             {!isPublicPage && <Footer />}
-            
-            {/* Only show Curio Bot on authenticated pages */}
-            {!isPublicPage && <CurioBot />}
           </div>
           <Toaster />
         </LanguageProvider>
