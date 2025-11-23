@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { authService } from '@/lib/auth';
 import sciVentureLogo from '@assets/SciVenture.png';
 
 interface RegisterProps {
@@ -23,7 +24,6 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
     confirmPassword: '',
   });
 
-  // Set document title
   useEffect(() => {
     document.title = "Create Account - SciVenture";
   }, []);
@@ -45,65 +45,45 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
       return;
     }
     
-    setIsLoading(true);
-    
-    try {
-      // Direct Supabase signup
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
-      if (!supabaseUrl || !supabaseKey) {
-        throw new Error('Supabase is not configured');
-      }
-      
-      console.log('Attempting direct Supabase signup...');
-      
-      const response = await fetch(`${supabaseUrl}/auth/v1/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseKey,
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          user_metadata: {
-            full_name: formData.fullName,
-            username: formData.username,
-          }
-        })
+    if (formData.password.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters",
+        variant: "destructive",
       });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        console.error('Signup error:', data);
-        throw new Error(data.message || 'Registration failed');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const result = await authService.signUp(
+        formData.email,
+        formData.password,
+        formData.fullName,
+        formData.username
+      );
+
+      if (!result.success) {
+        throw new Error(result.error || 'Registration failed');
       }
-      
-      console.log('Signup successful:', data);
-      
+
       setIsLoading(false);
       toast({
         title: "Registration successful",
-        description: "Your account has been created. Please check your email for verification.",
+        description: result.message || "Your account has been created. Please check your email for verification.",
       });
-      
-      // Call the onRegisterSuccess callback if provided
+
       if (onRegisterSuccess) {
         onRegisterSuccess();
-        // Redirect to login page after successful registration
-        setLocation('/login');
-      } else {
-        // Fallback if callback not provided
-        setLocation('/login');
       }
+      
+      setLocation('/login');
     } catch (error: any) {
       setIsLoading(false);
-      console.error('Registration error:', error);
       toast({
         title: "Registration failed",
-        description: error.message || "There was a problem creating your account. Please try again.",
+        description: error.message || "There was a problem creating your account",
         variant: "destructive",
       });
     }
@@ -111,7 +91,6 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Simple header with logo */}
       <header className="bg-white border-b border-gray-200 py-4">
         <div className="container mx-auto px-4">
           <a href="/" className="flex items-center">
@@ -144,7 +123,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="h-10"
+                    data-testid="input-fullname"
                   />
                 </div>
                 <div className="space-y-2">
@@ -157,7 +136,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="h-10"
+                    data-testid="input-email"
                   />
                 </div>
                 <div className="space-y-2">
@@ -169,7 +148,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.username}
                     onChange={handleChange}
-                    className="h-10"
+                    data-testid="input-username"
                   />
                 </div>
                 <div className="space-y-2">
@@ -178,11 +157,11 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="Create a password"
+                    placeholder="Create a password (min 6 characters)"
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="h-10"
+                    data-testid="input-password"
                   />
                 </div>
                 <div className="space-y-2">
@@ -195,13 +174,14 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="h-10"
+                    data-testid="input-confirm-password"
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-11 mt-2" 
+                  className="w-full mt-2" 
                   disabled={isLoading}
+                  data-testid="button-register"
                 >
                   {isLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
@@ -213,6 +193,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                 <a 
                   href="/login" 
                   className="font-medium text-primary hover:underline"
+                  data-testid="link-signin"
                 >
                   Sign in
                 </a>
@@ -225,7 +206,6 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
         </div>
       </main>
 
-      {/* Simple footer */}
       <footer className="bg-white border-t border-gray-200 py-6">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
           &copy; {new Date().getFullYear()} SciVenture. All rights reserved.

@@ -7,7 +7,7 @@ import UpcomingActivities from '@/components/dashboard/UpcomingActivities';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Star, Download, WifiOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
-import { supabase, getUser } from '@/lib/supabase';
+import { authService } from '@/lib/auth';
 import { useLanguage } from '@/providers/LanguageProvider';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
@@ -18,17 +18,13 @@ const Dashboard: React.FC = () => {
   // Default to userId 1 if not logged in with Supabase yet
   const userId = 1;
 
-  // Get Supabase user on component mount
+  // Get user on component mount
   useEffect(() => {
-    async function fetchSupabaseUser() {
-      const user = await getUser();
-      if (user) {
-        setSupabaseUser(user);
-        console.log('Supabase user:', user);
-      }
+    const user = authService.getUser();
+    if (user) {
+      setSupabaseUser(user);
+      console.log('User:', user);
     }
-    
-    fetchSupabaseUser();
   }, []);
 
   // Fetch user data from API

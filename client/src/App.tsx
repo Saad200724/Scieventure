@@ -22,7 +22,7 @@ import Modules from "@/pages/Modules";
 import Community from "@/pages/Community";
 import OfflineContent from "@/pages/OfflineContent";
 import { ROUTES } from "@/lib/constants";
-import { supabase, getSession } from "@/lib/supabase";
+import { authService } from "@/lib/auth";
 
 function App() {
   // Auth state
@@ -39,78 +39,39 @@ function App() {
 
   // Check for an existing session when the app loads
   useEffect(() => {
-    async function checkSession() {
+    const checkSession = () => {
       setLoading(true);
       
-      // First check for existing session in local storage to avoid flicker
-      const storedSession = localStorage.getItem('supabase_session');
-      if (storedSession) {
-        try {
-          const sessionData = JSON.parse(storedSession);
-          if (sessionData && Date.now() < sessionData.expiresAt) {
-            setIsAuthenticated(true);
-            setUser(sessionData.user);
-          }
-        } catch (e) {
-          console.error("Error parsing stored session:", e);
-        }
-      }
-      
-      // Then validate with the actual Supabase session
-      const { data, error } = await getSession();
-      
-      if (data && data.session) {
+      const session = authService.getSession();
+      if (session && session.user) {
         setIsAuthenticated(true);
-        setUser(data.session.user);
-        
-        // Store session info in localStorage with expiry
-        localStorage.setItem('supabase_session', JSON.stringify({
-          user: data.session.user,
-          expiresAt: Date.now() + 1000 * 60 * 60 * 24 // 24 hours
-        }));
-      } else if (error) {
-        console.error("Session error:", error);
-        localStorage.removeItem('supabase_session');
+        setUser(session.user);
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
       }
       
       setLoading(false);
-    }
+    };
     
     checkSession();
-    
-    // Set up auth state change listener
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          setIsAuthenticated(true);
-          setUser(session.user);
-          
-          // Update stored session
-          localStorage.setItem('supabase_session', JSON.stringify({
-            user: session.user,
-            expiresAt: Date.now() + 1000 * 60 * 60 * 24 // 24 hours
-          }));
-        } else if (event === 'SIGNED_OUT') {
-          setIsAuthenticated(false);
-          setUser(null);
-          localStorage.removeItem('supabase_session');
-        }
-      }
-    );
-    
-    // Clean up subscription
-    return () => {
-      if (authListener && authListener.subscription) {
-        authListener.subscription.unsubscribe();
-      }
-    };
   }, []);
 
   // Login handler
   const handleLogin = () => {
-    // The actual authentication is handled by the Supabase auth listener
-    // This is just for immediate UI feedback if needed
-    setIsAuthenticated(true);
+    const session = authService.getSession();
+    if (session && session.user) {
+      setIsAuthenticated(true);
+      setUser(session.user);
+    }
+  };
+
+  // Logout handler
+  const handleLogout = async () => {
+    await authService.signOut();
+    setIsAuthenticated(false);
+    setUser(null);
+    setLocation('/login');
   };
 
   return (
