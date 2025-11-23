@@ -32,8 +32,9 @@ function App() {
   const [location] = useLocation();
   
   // Check if current page is a public page (landing, login, register)
+  // "/" is only public if not authenticated, otherwise it redirects to /home
   const isPublicPage = 
-    location === "/" || 
+    (location === "/" && !isAuthenticated) || 
     location === "/login" || 
     location === "/register";
 
@@ -124,7 +125,11 @@ function App() {
             <main className="flex-grow">
               <Switch>
                 {/* Public routes (pre-login) */}
-                <Route path="/" component={Landing} />
+                <Route path="/">
+                  {() => (
+                    isAuthenticated ? <Redirect to="/home" /> : <Landing />
+                  )}
+                </Route>
                 <Route path="/login">
                   {() => (
                     <Login onLoginSuccess={handleLogin} />

@@ -46,7 +46,7 @@ export const ACHIEVEMENT_ICONS = {
 
 // Nav menu items with translation keys
 export const NAV_ITEMS = [
-  { labelEn: 'Home', labelBn: 'হোম', path: '/' },
+  { labelEn: 'Home', labelBn: 'হোম', path: '/home' },
   { labelEn: 'Modules', labelBn: 'মডিউল', path: '/modules' },
   { labelEn: 'Projects', labelBn: 'প্রকল্প', path: '/projects' },
   { labelEn: 'Community', labelBn: 'কমিউনিটি', path: '/community' },
