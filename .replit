@@ -47,5 +47,5 @@ expertMode = true
 [userenv]
 
 [userenv.shared]
-VITE_GOOGLE_API_KEY = "AIzaSyA5WC-FBNaqP0G_LvPQSdlWfBqChN9MxiU"
-GOOGLE_API_KEY = "AIzaSyA5WC-FBNaqP0G_LvPQSdlWfBqChN9MxiU"
+VITE_GOOGLE_API_KEY = "AIzaSyDkFy1SKQIcPB-r0beVrffmidRmVBmtwvs"
+GOOGLE_API_KEY = "AIzaSyDkFy1SKQIcPB-r0beVrffmidRmVBmtwvs"
