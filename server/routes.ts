@@ -15,6 +15,11 @@ import {
 import { simplifyText, analyzeResearchPaper, translateContent, deepResearch } from "./ai";
 import { analyzeFileWithAI } from "./file-processor";
 
+// Supabase configuration for development user verification
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
+
 // PDF generation functions
 function generateBiologyLabManualPDF(): string {
   const content = `EXPERIMENTAL BIOLOGY LAB MANUAL

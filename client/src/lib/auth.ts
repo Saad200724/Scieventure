@@ -65,22 +65,43 @@ export const authService = {
         };
       }
 
-      // Store user session in localStorage
+      console.log('Sign up response:', data);
+
+      // Store user session in localStorage if available
       if (data.session) {
         localStorage.setItem('sciventure-auth-session', JSON.stringify({
           access_token: data.session.access_token,
           refresh_token: data.session.refresh_token,
           user: data.user,
-          expires_at: data.session.expires_at
+          expires_at: data.session.expires_at || new Date().getTime() + (3600 * 1000)
         }));
+        return {
+          success: true,
+          data,
+          message: 'Account created successfully! You are now signed in.'
+        };
       }
 
-      return {
-        success: true,
-        data,
-        message: 'Sign up successful. Please check your email to verify your account.'
-      };
+      // If no session but signup succeeded, try to sign in immediately
+      // This handles cases where email verification is required
+      console.log('No session in signup response, attempting immediate sign in...');
+      const loginResult = await this.signIn(email, password);
+      
+      if (loginResult.success) {
+        return {
+          success: true,
+          data: loginResult.data,
+          message: 'Account created successfully! You are now signed in.'
+        };
+      } else {
+        return {
+          success: true,
+          data,
+          message: 'Account created successfully. Please sign in with your credentials.'
+        };
+      }
     } catch (error: any) {
+      console.error('Sign up error:', error);
       return {
         success: false,
         error: error.message || 'Sign up failed. Please try again.'
@@ -93,6 +114,8 @@ export const authService = {
    */
   async signIn(email: string, password: string): Promise<AuthResponse> {
     try {
+      console.log('Attempting sign in with:', { email });
+      
       const response = await fetch(`${API_BASE}/token?grant_type=password`, {
         method: 'POST',
         headers: {
@@ -106,12 +129,26 @@ export const authService = {
       });
 
       const data = await response.json();
+      
+      console.log('Sign in response status:', response.status);
+      console.log('Sign in response data:', data);
 
       if (!response.ok) {
+        const errorMsg = data.error_description || data.message || data.error || 'Sign in failed';
+        console.error('Sign in error:', errorMsg);
         return {
           success: false,
-          error: data.error_description || data.message || 'Sign in failed',
+          error: errorMsg,
           data
+        };
+      }
+
+      // Check if we have the required fields
+      if (!data.access_token || !data.user) {
+        console.error('Missing access_token or user in response');
+        return {
+          success: false,
+          error: 'Invalid response from sign in. Missing authentication data.'
         };
       }
 
@@ -123,12 +160,15 @@ export const authService = {
         expires_at: new Date().getTime() + (data.expires_in * 1000)
       }));
 
+      console.log('Sign in successful, session stored');
+
       return {
         success: true,
         data,
         message: 'Sign in successful!'
       };
     } catch (error: any) {
+      console.error('Sign in exception:', error);
       return {
         success: false,
         error: error.message || 'Sign in failed. Please try again.'
