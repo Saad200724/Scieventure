@@ -54,14 +54,14 @@ const createFailsafeModel = (): GenAIModel => {
 // Get the Gemini model - try different model options
 let model: GenAIModel;
 try {
-  // First try the flash model which has higher rate limits
-  model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  console.log("Successfully initialized gemini-1.5-flash model");
+  // Try gemini-pro first as it's more widely available
+  model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  console.log("Successfully initialized gemini-pro model");
 } catch (error) {
-  console.error("Error initializing gemini-1.5-flash, falling back to gemini-pro:", error);
+  console.error("Error initializing gemini-pro, trying gemini-1.5-flash:", error);
   try {
-    model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    console.log("Successfully initialized gemini-pro model");
+    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    console.log("Successfully initialized gemini-1.5-flash model");
   } catch (fallbackError) {
     console.error("Error initializing fallback model:", fallbackError);
     // Use our failsafe model
