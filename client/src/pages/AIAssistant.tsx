@@ -203,7 +203,7 @@ const AIAssistant: React.FC = () => {
       console.error('Error uploading file:', error);
       toast({
         title: "Upload Failed",
-        description: error.message || "There was a problem uploading your file. Please try again.",
+        description: (error instanceof Error ? error.message : "There was a problem uploading your file. Please try again."),
         variant: "destructive"
       });
     } finally {

@@ -33,11 +33,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [location] = useLocation();
   
-  // Check if current page is a public page (landing, login, register)
+  // Check if current page is a public page (landing, login, register, AI assistant)
   const isPublicPage = 
     location === "/" || 
     location === "/login" || 
-    location === "/register";
+    location === "/register" ||
+    location === "/ai-assistant";
 
   // Check for an existing session when the app loads (non-blocking)
   useEffect(() => {
@@ -161,13 +162,9 @@ function App() {
                 </Route>
                 <Route path={ROUTES.aiAssistant}>
                   {() => (
-                    isAuthenticated ? (
-                      <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading AI Assistant...</div>}>
-                        <AIAssistant />
-                      </Suspense>
-                    ) : (
-                      <Redirect to="/login" />
-                    )
+                    <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading AI Assistant...</div>}>
+                      <AIAssistant />
+                    </Suspense>
                   )}
                 </Route>
                 <Route path={ROUTES.projects}>
