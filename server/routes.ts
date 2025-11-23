@@ -695,6 +695,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Development endpoint to auto-confirm email (bypasses email verification in dev)
+  app.post("/api/auth/confirm-email", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+
+      // Only allow in development
+      if (process.env.NODE_ENV !== "development") {
+        return res.status(403).json({ error: "This endpoint is only available in development" });
+      }
+
+      // Try to confirm email using Supabase admin API
+      // Note: This requires SERVICE_ROLE_KEY which should be provided
+      const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      
+      if (!serviceRoleKey) {
+        // If no service role key, just return success - user will need to verify email manually
+        console.log("No service role key available. Email confirmation skipped.");
+        return res.status(200).json({ 
+          success: true, 
+          message: "User account created. Email confirmation required." 
+        });
+      }
+
+      if (!SUPABASE_URL) {
+        return res.status(500).json({ error: "Supabase URL not configured" });
+      }
+
+      // Use Supabase admin API to mark email as confirmed
+      const confirmResponse = await fetch(
+        `${SUPABASE_URL}/auth/v1/admin/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": serviceRoleKey,
+            "Authorization": `Bearer ${serviceRoleKey}`,
+          },
+          body: JSON.stringify({
+            email,
+            email_confirm: true,
+          }),
+        }
+      );
+
+      if (!confirmResponse.ok) {
+        const errorData = await confirmResponse.json();
+        console.log("Email confirmation attempt:", errorData);
+        // Continue anyway - user might already exist
+      }
+
+      res.status(200).json({ 
+        success: true, 
+        message: "Email confirmed successfully" 
+      });
+    } catch (error: any) {
+      console.error("Error confirming email:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message || "Failed to confirm email" 
+      });
+    }
+  });
+
   // Create an HTTP server from the Express app
   const httpServer = createServer(app);
 

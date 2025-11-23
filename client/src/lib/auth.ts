@@ -82,9 +82,25 @@ export const authService = {
         };
       }
 
-      // If no session but signup succeeded, try to sign in immediately
-      // This handles cases where email verification is required
-      console.log('No session in signup response, attempting immediate sign in...');
+      // If no session, try to confirm email first (development only)
+      console.log('No session in signup response. Attempting to confirm email...');
+      try {
+        const confirmResponse = await fetch('/api/auth/confirm-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email })
+        });
+        
+        const confirmData = await confirmResponse.json();
+        console.log('Email confirmation result:', confirmData);
+      } catch (confirmError) {
+        console.log('Email confirmation attempt failed (expected in production):', confirmError);
+      }
+
+      // Try to sign in after confirmation attempt
+      console.log('Attempting sign in after email confirmation...');
       const loginResult = await this.signIn(email, password);
       
       if (loginResult.success) {

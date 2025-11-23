@@ -33,10 +33,6 @@ build = ["npm", "run", "build"]
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 41529
-externalPort = 3000
-
 [agent]
 expertMode = true
 
