@@ -32,9 +32,8 @@ function App() {
   const [location] = useLocation();
   
   // Check if current page is a public page (landing, login, register)
-  // "/" is only public if not authenticated, otherwise it redirects to /home
   const isPublicPage = 
-    (location === "/" && !isAuthenticated) || 
+    location === "/" || 
     location === "/login" || 
     location === "/register";
 
