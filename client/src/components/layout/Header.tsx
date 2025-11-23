@@ -24,7 +24,8 @@ const Header: React.FC = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [desktopProfileMenuOpen, setDesktopProfileMenuOpen] = useState(false);
+  const [mobileProfileMenuOpen, setMobileProfileMenuOpen] = useState(false);
   
   // Get the user info from Supabase
   useEffect(() => {
@@ -55,15 +56,18 @@ const Header: React.FC = () => {
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
   
   const handleLogout = async () => {
+    setDesktopProfileMenuOpen(false);
+    setMobileProfileMenuOpen(false);
     await supabase.auth.signOut();
     localStorage.removeItem('supabase_session');
     setLocation('/');
-    setProfileMenuOpen(false);
   };
   
-  // Close mobile menu when changing routes
+  // Close menus when changing routes
   useEffect(() => {
     setMobileMenuOpen(false);
+    setDesktopProfileMenuOpen(false);
+    setMobileProfileMenuOpen(false);
   }, [location]);
   
   // Close mobile menu when resizing to desktop
@@ -142,7 +146,7 @@ const Header: React.FC = () => {
           )}
           
           {/* User Avatar - Desktop with Profile Dropdown */}
-          <DropdownMenu open={profileMenuOpen} onOpenChange={setProfileMenuOpen}>
+          <DropdownMenu open={desktopProfileMenuOpen} onOpenChange={setDesktopProfileMenuOpen}>
             <DropdownMenuTrigger asChild className="hidden sm:block">
               <button 
                 className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-primary text-white flex items-center justify-center text-xs sm:text-sm font-semibold cursor-pointer hover:opacity-80 transition-opacity"
@@ -154,13 +158,17 @@ const Header: React.FC = () => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => { setLocation('/dashboard'); setProfileMenuOpen(false); }} data-testid="button-profile-dashboard">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
+              <DropdownMenuItem asChild data-testid="button-profile-dashboard">
+                <Link href="/dashboard">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Dashboard</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => { setLocation('/offline-content'); setProfileMenuOpen(false); }} data-testid="button-profile-offline">
-                <Wifi className="mr-2 h-4 w-4" />
-                <span>Offline Content</span>
+              <DropdownMenuItem asChild data-testid="button-profile-offline">
+                <Link href="/offline-content">
+                  <Wifi className="mr-2 h-4 w-4" />
+                  <span>Offline Content</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
                 <LogOut className="mr-2 h-4 w-4" />
@@ -176,7 +184,7 @@ const Header: React.FC = () => {
           </div>
           
           {/* User Avatar - Mobile with Profile Dropdown */}
-          <DropdownMenu open={profileMenuOpen} onOpenChange={setProfileMenuOpen}>
+          <DropdownMenu open={mobileProfileMenuOpen} onOpenChange={setMobileProfileMenuOpen}>
             <DropdownMenuTrigger asChild className="md:hidden">
               <button 
                 className="h-7 w-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-semibold cursor-pointer hover:opacity-80 transition-opacity"
@@ -188,13 +196,17 @@ const Header: React.FC = () => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => { setLocation('/dashboard'); setProfileMenuOpen(false); }} data-testid="button-profile-dashboard-mobile">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
+              <DropdownMenuItem asChild data-testid="button-profile-dashboard-mobile">
+                <Link href="/dashboard">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Dashboard</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => { setLocation('/offline-content'); setProfileMenuOpen(false); }} data-testid="button-profile-offline-mobile">
-                <Wifi className="mr-2 h-4 w-4" />
-                <span>Offline Content</span>
+              <DropdownMenuItem asChild data-testid="button-profile-offline-mobile">
+                <Link href="/offline-content">
+                  <Wifi className="mr-2 h-4 w-4" />
+                  <span>Offline Content</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout} data-testid="button-logout-mobile">
                 <LogOut className="mr-2 h-4 w-4" />
