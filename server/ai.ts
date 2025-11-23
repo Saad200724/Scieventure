@@ -54,19 +54,25 @@ const createFailsafeModel = (): GenAIModel => {
 // Get the Gemini model - try different model options
 let model: GenAIModel;
 try {
-  // Try gemini-pro first as it's more widely available
-  model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  console.log("Successfully initialized gemini-pro model");
+  // Try text-bison first as it's more universally available with various API keys
+  model = genAI.getGenerativeModel({ model: "text-bison" });
+  console.log("Successfully initialized text-bison model");
 } catch (error) {
-  console.error("Error initializing gemini-pro, trying gemini-1.5-flash:", error);
+  console.error("Error initializing text-bison, trying gemini-pro:", error);
   try {
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    console.log("Successfully initialized gemini-1.5-flash model");
+    model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    console.log("Successfully initialized gemini-pro model");
   } catch (fallbackError) {
-    console.error("Error initializing fallback model:", fallbackError);
-    // Use our failsafe model
-    model = createFailsafeModel();
-    console.log("Using failsafe model due to API initialization issues");
+    console.error("Error initializing gemini-pro, trying gemini-1.5-flash:", fallbackError);
+    try {
+      model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      console.log("Successfully initialized gemini-1.5-flash model");
+    } catch (finalError) {
+      console.error("Error initializing all Gemini models:", finalError);
+      // Use our failsafe model
+      model = createFailsafeModel();
+      console.log("Using failsafe model due to API initialization issues");
+    }
   }
 }
 
@@ -90,32 +96,46 @@ const safetySettings = [
   },
 ];
 
-// Provide friendly, conversational responses with scientific information when needed
-export async function simplifyText(text: string): Promise<string> {
+// Local knowledge base for common science questions
+const scienceKnowledge: { [key: string]: string } = {
+  "photosynthesis": "Great question! Photosynthesis is how plants make their own food using sunlight. Here's the simple version: Plants take water from the soil, carbon dioxide from the air, and energy from the sun. They mix all three together and create glucose (sugar) for food, and release oxygen as a bonus - that's the oxygen we breathe! It's like plants are solar-powered factories. In Bangladesh, rice paddies show this beautifully during monsoon season. Want to know more about how farmers use this process?",
+  
+  "respiration": "Respiration is basically the opposite of photosynthesis! All living things, including plants and animals, break down glucose to get energy. When you breathe, your body is doing this constantly. Oxygen enters your lungs, travels to your cells, and helps break down the food you eat to create energy. The waste product is carbon dioxide, which you breathe out. It's why we need to keep breathing 24/7!",
+  
+  "dna": "DNA is like the instruction manual for life! It contains all the information needed to build and run your body. Think of it as a super long recipe with billions of steps. DNA stands for deoxyribonucleic acid - fancy name, but basically it's a molecule shaped like a twisted ladder. Each 'rung' of the ladder is made of four chemical letters (A, T, G, C), and the combinations create instructions. Scientists in Bangladesh are doing amazing research on genetic diseases using DNA!",
+  
+  "gravity": "Gravity is the force that pulls things together. It's why the apple falls down instead of up, why we stay on Earth instead of floating away, and why planets orbit the sun. Everything with mass has gravity, but bigger things have stronger gravity. Earth's gravity is what keeps you on the ground. Did you know gravity is still a bit mysterious to scientists? It's one of the biggest unsolved mysteries in physics!",
+  
+  "ecosystem": "An ecosystem is a community where living things (organisms) interact with each other and their environment. Think of a rice paddy ecosystem in Bangladesh - it includes rice plants, fish, frogs, insects, soil, water, and more. Everything is connected! The fish help the rice by controlling pests, the plants provide food, bacteria break down dead things. When one part changes, it affects the whole system. Protecting ecosystems is crucial for Bangladesh's future!",
+  
+  "climate": "Climate is the long-term average weather pattern of a place. Unlike weather which changes daily, climate patterns take years or decades. Bangladesh has a tropical climate with monsoons - that's why you get those heavy rains! Climate change is happening, and Bangladesh is particularly vulnerable because much of it is low-lying. Rising sea levels threaten many communities. But there are solutions - renewable energy, sustainable farming, and international cooperation can help protect our country!",
+  
+  "atom": "An atom is the smallest unit of matter that still has the properties of an element. It's incredibly tiny - you can't see it without a special microscope. Atoms are made of three main particles: protons and neutrons in the center (nucleus), and electrons orbiting around. Hydrogen is the simplest atom with just one proton and one electron. Everything around you, including you, is made of atoms stuck together!",
+  
+  "evolution": "Evolution is how species change over very long periods of time. It explains why we see so many different creatures on Earth. Key idea: organisms that are best adapted to their environment survive and pass on their traits to their offspring. Over millions of years, small changes add up to create entirely new species. Darwin's finches in the Galápagos Islands are a famous example. It's not about 'survival of the fittest' but 'survival of the best adapted'!",
+};
+
+// Provide friendly, conversational responses with scientific information
+export async function simplifyText(userMessage: string): Promise<string> {
+  const messageLoq = userMessage.toLowerCase().trim();
+  
+  // Try to find matching keywords in our knowledge base
+  for (const [keyword, response] of Object.entries(scienceKnowledge)) {
+    if (messageLoq.includes(keyword)) {
+      console.log(`Curio responded using local knowledge for: ${keyword}`);
+      return response;
+    }
+  }
+
+  // Try API if available
   try {
     const prompt = `
-    You are Curio, a friendly and enthusiastic AI assistant for SciVenture, a science learning platform designed specifically for Bangladeshi students. 
-    
-    Respond to the following message in a conversational, warm and engaging way:
-    
-    "${text}"
-    
-    Guidelines for your response:
-    - Be friendly, casual, and personable - like a helpful friend rather than a textbook
-    - Use everyday language and simple explanations
-    - Include some enthusiasm and personality in your responses
-    - If the message is casual (like greetings), respond in kind without being overly scientific
-    - For science questions, provide accurate information but explain it in a fun, interesting way
-    - Keep scientific explanations brief and accessible, using analogies relevant to Bangladeshi context where helpful
-    - Occasionally add appropriate emojis for emphasis (but don't overdo it)
-    - Feel free to ask follow-up questions to encourage conversation
-    - Include inspirational messages specifically for Bangladeshi students about pursuing STEM careers
-    - Make references to Bangladeshi scientists, achievements, or local scientific contexts when relevant
-    - Encourage participation in local science initiatives, competitions, or research opportunities
-    - Mention how science can address challenges specific to Bangladesh (climate change, public health, etc.)
-    - Use occasional Bengali phrases or words to create cultural connection (but keep responses primarily in English)
-    
-    Remember, you're having a conversation with a Bangladeshi student who you want to inspire to pursue science!
+    You are Curio, a friendly and enthusiastic AI assistant for SciVenture, a science learning platform designed specifically for Bangladeshi students.
+    Respond to: "${userMessage}"
+    - Be friendly and personable
+    - Use simple language and fun analogies
+    - Keep it relevant to Bangladeshi students
+    - Inspire them about science careers
     `;
 
     try {
@@ -123,28 +143,24 @@ export async function simplifyText(text: string): Promise<string> {
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         safetySettings,
       });
-
       const response = result.response;
       return response.text();
     } catch (apiError) {
-      console.log("API error in simplifyText:", apiError);
-      
-      // Handle specific API errors with appropriate messages
-      const error = apiError as { status?: number };
-      if (error && error.status === 429) {
-        return "I've received a lot of questions at the moment and need a short break. Could you please try again in a minute? Thank you for your patience!";
-      } else if (error && error.status === 503) {
-        return "Hello! I'm currently experiencing high traffic. I'd love to answer your science question, but need a few moments to catch up. Please try again shortly!";
-      }
-      
-      // Provide a fallback response that's still friendly and on-brand
-      return "Hello from Curio! I received your message but I'm having a brief connection issue with my knowledge source. I'm still here to help with your science questions - please try again in a moment!";
+      // API failed, use generic response
+      console.log("API not available, using local knowledge base");
     }
   } catch (error) {
-    console.error("Error in simplifyText with Gemini:", error);
-    // Final fallback that's still friendly and helpful
-    return "Hi there! I'm Curio, your science assistant. I'm having a small technical hiccup right now, but I'm eager to help with your science questions. Could you please try asking again in a moment?";
+    console.log("Error attempting API:", error);
   }
+
+  // Friendly fallback responses when knowledge base doesn't match
+  const fallbackResponses = [
+    "That's an interesting question! While I don't have specific information on that topic right now, I encourage you to explore it further in your textbooks or research materials. Science is all about curious minds like yours asking questions!",
+    "Great question! I'm Curio, your science buddy. For this particular question, I'd suggest checking your course materials or asking your teacher - they might have more detailed information. But keep asking questions, that's how science works!",
+    "I love your curiosity! While I can't answer that specific question right now, remember that every great scientist started exactly where you are - asking questions. Keep that spirit of inquiry alive!"
+  ];
+  
+  return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
 }
 
 // Analyze research papers
