@@ -32,6 +32,9 @@ export const supabase = getSupabaseClient();
 // Authentication helper functions
 export const signUp = async (email: string, password: string, userData?: Record<string, any>) => {
   try {
+    console.log('Attempting signup with:', { email, hasPassword: !!password });
+    console.log('Supabase client:', supabaseUrl);
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -41,12 +44,25 @@ export const signUp = async (email: string, password: string, userData?: Record<
     });
     
     if (error) {
-      console.error('Supabase signup error:', error);
+      console.error('Supabase signup error details:', {
+        message: error.message,
+        status: (error as any).status,
+        statusCode: (error as any).statusCode,
+        name: (error as any).name,
+        stack: (error as any).stack
+      });
+    } else {
+      console.log('Signup successful:', data);
     }
     
     return { data, error };
-  } catch (err) {
+  } catch (err: any) {
     console.error('Signup exception:', err);
+    console.error('Exception details:', {
+      message: err.message,
+      stack: err.stack,
+      name: err.name
+    });
     throw err;
   }
 };

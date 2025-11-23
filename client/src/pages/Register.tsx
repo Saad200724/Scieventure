@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { signUp } from '@/lib/supabase';
 import sciVentureLogo from '@assets/SciVenture.png';
 
 interface RegisterProps {
@@ -49,18 +48,25 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
     setIsLoading(true);
     
     try {
-      // Register the user with Supabase authentication
-      const { data, error } = await signUp(formData.email, formData.password, {
-        full_name: formData.fullName,
-        username: formData.username
+      // Register the user via backend API (which calls Supabase)
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          fullName: formData.fullName,
+          username: formData.username
+        })
       });
       
-      if (error) {
-        throw error;
-      }
+      const data = await response.json();
       
-      // Note: User profile creation in Firebase is handled by the auth listener in App.tsx
-      // This ensures data consistency between Supabase auth and Firebase database
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
       
       setIsLoading(false);
       toast({

@@ -316,6 +316,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Registration endpoint - handles Supabase signup server-side
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { email, password, fullName, username } = req.body;
+      
+      if (!email || !password || !fullName || !username) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      
+      const supabaseUrl = process.env.VITE_SUPABASE_URL;
+      const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        console.error('Missing Supabase credentials');
+        return res.status(500).json({ message: "Server configuration error" });
+      }
+      
+      // Call Supabase REST API directly to signup
+      const signupResponse = await fetch(`${supabaseUrl}/auth/v1/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': supabaseKey,
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          user_metadata: {
+            full_name: fullName,
+            username: username,
+          }
+        })
+      });
+      
+      const signupData = await signupResponse.json();
+      
+      if (!signupResponse.ok) {
+        console.error('Supabase signup error:', signupData);
+        return res.status(signupResponse.status).json({ 
+          message: signupData.message || "Registration failed" 
+        });
+      }
+      
+      res.status(201).json({ 
+        message: "Registration successful. Please check your email to verify your account.",
+        user: signupData.user 
+      });
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      res.status(500).json({ message: error.message || "Registration failed" });
+    }
+  });
+  
   // Module routes
   app.get("/api/modules", async (req, res) => {
     const modules = await storage.getAllModules();
