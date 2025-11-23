@@ -31,7 +31,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   
   // Check if current page is a public page (landing, login, register)
   const isPublicPage = 
@@ -208,11 +208,14 @@ function App() {
             
             {/* Floating Curio AI Button - Bottom Right */}
             {isAuthenticated && !isPublicPage && location !== ROUTES.curio && (
-              <Link href={ROUTES.curio}>
-                <a className="fixed bottom-8 right-8 z-40 w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 group" data-testid="button-navigate-curio">
-                  <Brain className="w-8 h-8 group-hover:animate-pulse" />
-                </a>
-              </Link>
+              <button 
+                onClick={() => navigate(ROUTES.curio)}
+                className="fixed bottom-8 right-8 z-40 w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 group" 
+                data-testid="button-navigate-curio"
+                title="Chat with Curio AI"
+              >
+                <Brain className="w-8 h-8 group-hover:animate-pulse" />
+              </button>
             )}
           </div>
           <Toaster />

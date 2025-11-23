@@ -45,28 +45,39 @@ export async function generateCurioResponse(
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-pro",
+      systemInstruction: SYSTEM_PROMPT,
+    });
 
-    // Format messages for Gemini API
-    const formattedMessages = messages.map((msg) => ({
-      role: msg.role === "user" ? "user" : "model",
-      parts: [{ text: msg.content }],
-    }));
+    // Build proper conversation history (all but last message)
+    const history: Array<{ role: "user" | "model"; parts: Array<{ text: string }> }> = [];
+    
+    for (let i = 0; i < messages.length - 1; i++) {
+      const msg = messages[i];
+      history.push({
+        role: msg.role === "user" ? "user" : "model",
+        parts: [{ text: msg.content }],
+      });
+    }
 
-    // Create chat session with system prompt
+    // Get the current user message
+    const currentMessage = messages[messages.length - 1];
+    if (currentMessage.role !== "user") {
+      throw new Error("Last message must be from user");
+    }
+
+    // Create chat session with proper history
     const chat = model.startChat({
-      history: formattedMessages.slice(0, -1),
+      history: history.length > 0 ? history : undefined,
       generationConfig: {
         maxOutputTokens: 1024,
         temperature: 0.7,
       },
     });
 
-    const userMessage = messages[messages.length - 1].content;
-    const response = await chat.sendMessage(
-      `${SYSTEM_PROMPT}\n\nStudent: ${userMessage}`
-    );
-
+    // Send only the user message content
+    const response = await chat.sendMessage(currentMessage.content);
     const text = response.response.text();
     return text;
   } catch (error) {
