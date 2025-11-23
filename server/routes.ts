@@ -12,8 +12,6 @@ import {
   insertResourceSchema,
   insertChatMessageSchema
 } from "@shared/schema";
-import { simplifyText, analyzeResearchPaper, translateContent, deepResearch } from "./ai";
-import { analyzeFileWithAI } from "./file-processor";
 
 // PDF generation functions
 function generateBiologyLabManualPDF(): string {
@@ -495,41 +493,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/chat", async (req, res) => {
     try {
       const messageData = insertChatMessageSchema.parse(req.body);
-      const requestType = req.query.type as string || 'simplify';
-      const translateToBengali = req.body.translate_to_bengali === true;
       
-      // Generate AI response
-      let response = "";
-      let bengaliTranslation = null;
-      
-      try {
-        if (requestType === 'deep_research') {
-          response = await deepResearch(messageData.message);
-        } else if (requestType === 'analyze') {
-          response = await analyzeResearchPaper(messageData.message);
-        } else if (requestType === 'translate') {
-          const direction = req.query.direction as string || 'english_to_bengali';
-          const targetLanguage = direction === 'english_to_bengali' ? 'bengali' : 'english';
-          response = await translateContent(messageData.message, targetLanguage);
-        } else {
-          // Default to simplify
-          response = await simplifyText(messageData.message);
-        }
-        
-        // Generate Bengali translation if requested
-        if (translateToBengali) {
-          try {
-            bengaliTranslation = await translateContent(response, 'bengali');
-            console.log("Generated Bengali translation successfully");
-          } catch (translationError) {
-            console.error("Failed to generate Bengali translation:", translationError);
-            bengaliTranslation = "Error generating Bengali translation";
-          }
-        }
-      } catch (error) {
-        console.error(`Error generating AI response (${requestType}):`, error);
-        response = "Sorry, I'm having trouble processing your request right now. Please try again later.";
-      }
+      // Placeholder response - no AI functionality
+      const response = "This feature is currently being configured. Please check back soon!";
       
       const chatMessage = await storage.createChatMessage({
         ...messageData,
@@ -538,7 +504,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.status(201).json({
         ...chatMessage,
-        bengali_translation: bengaliTranslation
+        bengali_translation: null
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -548,39 +514,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Dedicated endpoint for deep research with Curio assistant
-  app.post("/api/curio/research", async (req, res) => {
-    try {
-      const { text, userId } = req.body;
-      
-      if (!text) {
-        return res.status(400).json({ message: "Text to research is required" });
-      }
-      
-      // Process deep research request with Gemini AI
-      let response;
-      try {
-        response = await deepResearch(text);
-      } catch (error) {
-        console.error("Error in deep research:", error);
-        return res.status(500).json({ message: "Failed to process deep research request" });
-      }
-      
-      // Store in chat history if userId is provided
-      if (userId) {
-        await storage.createChatMessage({
-          userId,
-          message: text,
-          response
-        });
-      }
-      
-      res.json({ response });
-    } catch (error) {
-      console.error("Deep research error:", error);
-      res.status(500).json({ message: "Failed to process deep research request" });
-    }
-  });
 
   // File upload endpoint for document analysis
   app.post("/api/document/upload", upload.single('file'), async (req, res) => {
@@ -592,36 +525,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      const userId = req.body.userId ? parseInt(req.body.userId) : 1; // Default to user 1 if not provided
-      
-      // Process the uploaded file
-      const result = await analyzeFileWithAI(req.file);
-      
-      if (!result.success) {
-        return res.status(400).json({ 
-          success: false, 
-          message: result.error || "Failed to analyze document" 
-        });
-      }
-      
-      // Store in chat history if requested
-      if (req.body.saveToChat === 'true') {
-        const message = `Analyzed document: ${req.file.originalname}`;
-        
-        await storage.createChatMessage({
-          userId,
-          message,
-          response: result.summary || "No analysis available"
-        });
-      }
-      
       res.status(200).json({
         success: true,
         fileName: req.file.originalname,
         fileType: req.file.mimetype,
         fileSize: req.file.size,
-        text: result.text,
-        analysis: result.summary
+        text: "File uploaded successfully",
+        analysis: "This feature is currently being configured. Please check back soon!"
       });
       
     } catch (error) {
