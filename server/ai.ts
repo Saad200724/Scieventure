@@ -51,14 +51,27 @@ export async function generateCurioResponse(
     });
 
     // Build proper conversation history (all but last message)
+    // Gemini requires: history must start with 'user' role
     const history: Array<{ role: "user" | "model"; parts: Array<{ text: string }> }> = [];
     
+    // Find the first user message index
+    let firstUserIndex = -1;
     for (let i = 0; i < messages.length - 1; i++) {
-      const msg = messages[i];
-      history.push({
-        role: msg.role === "user" ? "user" : "model",
-        parts: [{ text: msg.content }],
-      });
+      if (messages[i].role === "user") {
+        firstUserIndex = i;
+        break;
+      }
+    }
+
+    // Only add history starting from first user message
+    if (firstUserIndex !== -1) {
+      for (let i = firstUserIndex; i < messages.length - 1; i++) {
+        const msg = messages[i];
+        history.push({
+          role: msg.role === "user" ? "user" : "model",
+          parts: [{ text: msg.content }],
+        });
+      }
     }
 
     // Get the current user message
