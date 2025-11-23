@@ -117,37 +117,36 @@ const scienceKnowledge: { [key: string]: string } = {
 
 // Provide friendly, conversational responses with scientific information
 export async function simplifyText(userMessage: string): Promise<string> {
-  // PRIORITY 1: Try Gemini API FIRST for detailed, generated responses
-  console.log("Attempting Gemini API for:", userMessage.substring(0, 50));
+  // PRIORITY 1: Try AI API (OpenAI) for detailed, generated responses
+  console.log("Attempting AI API for:", userMessage.substring(0, 50));
   try {
-    const prompt = `
-    You are Curio, a friendly and enthusiastic AI assistant for SciVenture, a science learning platform designed specifically for Bangladeshi students.
-    
-    Respond to: "${userMessage}"
-    
-    Guidelines:
-    - Be friendly, personable, and enthusiastic
-    - Use simple language and fun analogies that Bangladeshi students understand
-    - Include relevant examples from Bangladesh (rice paddies, monsoons, local scientists, etc.)
-    - Provide detailed, informative answers (2-3 paragraphs)
-    - Inspire them about science careers and opportunities in Bangladesh
-    - End with an encouraging question to deepen their learning
-    `;
+    const systemPrompt = `You are Curio, a friendly and enthusiastic AI assistant for SciVenture, a science learning platform designed specifically for Bangladeshi students.
 
-    try {
-      const result = await model.generateContent({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        safetySettings,
-      });
-      const response = result.response;
-      const apiResponse = response.text();
-      console.log("✓ Gemini API generated response successfully");
-      return apiResponse;
-    } catch (apiError: any) {
-      console.log("✗ Gemini API error:", apiError?.message || apiError);
+Guidelines:
+- Be friendly, personable, and enthusiastic
+- Use simple language and fun analogies that Bangladeshi students understand
+- Include relevant examples from Bangladesh (rice paddies, monsoons, local scientists, etc.)
+- Provide detailed, informative answers (2-3 paragraphs)
+- Inspire them about science careers and opportunities in Bangladesh
+- End with an encouraging question to deepen their learning`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage }
+      ],
+      temperature: 0.7,
+      max_tokens: 500,
+    });
+
+    const aiResponse = response.choices[0]?.message?.content;
+    if (aiResponse) {
+      console.log("✓ AI API generated response successfully");
+      return aiResponse;
     }
-  } catch (error: any) {
-    console.log("Error attempting Gemini API:", error?.message || error);
+  } catch (apiError: any) {
+    console.log("✗ AI API error:", apiError?.message || "Unknown error");
   }
 
   // PRIORITY 2: Fall back to local knowledge base
