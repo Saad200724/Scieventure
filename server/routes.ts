@@ -270,16 +270,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       fileSize: 50 * 1024 * 1024, // 50MB max file size
     },
     fileFilter: (req, file, cb) => {
-      // Accept PDF, DOCX and TXT files
+      // Accept PDF, DOCX, DOC, and image files
       if (
         file.mimetype === 'application/pdf' ||
         file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-        file.mimetype === 'text/plain'
+        file.mimetype === 'application/msword' ||
+        file.mimetype === 'text/plain' ||
+        file.mimetype === 'image/jpeg' ||
+        file.mimetype === 'image/png'
       ) {
         cb(null, true);
       } else {
         cb(null, false);
-        cb(new Error('Only PDF, DOCX and TXT files are allowed'));
+        cb(new Error('Only PDF, DOCX, DOC, JPG, JPEG, PNG and TXT files are allowed'));
       }
     }
   });
