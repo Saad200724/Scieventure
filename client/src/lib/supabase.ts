@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Using environment variables from .env file
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -11,13 +11,23 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing Supabase environment variables. Please check your .env file.');
 }
 
-// Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
+// Singleton pattern to ensure only one Supabase client exists
+let supabaseInstance: SupabaseClient | null = null;
+
+function getSupabaseClient(): SupabaseClient {
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        storageKey: 'sciventure-auth',
+      }
+    });
   }
-});
+  return supabaseInstance;
+}
+
+export const supabase = getSupabaseClient();
 
 // Authentication helper functions
 export const signUp = async (email: string, password: string, userData?: Record<string, any>) => {
