@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Menu, Bell, Sun, Moon, X } from 'lucide-react';
 import sciVentureLogo from '@assets/SciVenture.png';
-import { authService } from '@/lib/auth';
+import { supabase, getUser } from '@/lib/supabase';
 
 const Header: React.FC = () => {
   const [location] = useLocation();
@@ -25,12 +25,30 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   
-  // Get the user info from auth service
+  // Get the user info from Supabase
   useEffect(() => {
-    const user = authService.getUser();
-    if (user) {
-      setSupabaseUser(user);
+    // First try to get from localStorage for faster loading
+    const storedSession = localStorage.getItem('supabase_session');
+    if (storedSession) {
+      try {
+        const sessionData = JSON.parse(storedSession);
+        if (sessionData && sessionData.user) {
+          setSupabaseUser(sessionData.user);
+        }
+      } catch (e) {
+        console.error('Error parsing stored session:', e);
+      }
     }
+    
+    // Then fetch the current user
+    async function fetchUser() {
+      const user = await getUser();
+      if (user) {
+        setSupabaseUser(user);
+      }
+    }
+    
+    fetchUser();
   }, []);
   
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);

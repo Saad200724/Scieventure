@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { authService } from '@/lib/auth';
+import { signIn } from '@/lib/supabase';
 import sciVentureLogo from '@assets/SciVenture.png';
 
 interface LoginProps {
@@ -21,6 +21,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     password: '',
   });
 
+  // Set document title
   useEffect(() => {
     document.title = "Sign In - SciVenture";
   }, []);
@@ -33,25 +34,29 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    
     try {
-      const result = await authService.signIn(formData.email, formData.password);
-
-      if (!result.success) {
-        throw new Error(result.error || 'Sign in failed');
+      const { data, error } = await signIn(formData.email, formData.password);
+      
+      if (error) {
+        throw error;
       }
-
+      
       setIsLoading(false);
       toast({
         title: "Login successful",
         description: "Welcome back to SciVenture!",
       });
-
+      
+      // Call the onLoginSuccess callback if provided
       if (onLoginSuccess) {
         onLoginSuccess();
+        // Always redirect to the home page
+        setLocation('/home');
+      } else {
+        // Fallback if callback not provided
+        setLocation('/home');
       }
-
-      setLocation('/home');
     } catch (error: any) {
       setIsLoading(false);
       toast({
@@ -64,6 +69,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Simple header with logo */}
       <header className="bg-white border-b border-gray-200 py-4">
         <div className="container mx-auto px-4">
           <a href="/" className="flex items-center">
@@ -80,9 +86,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         <div className="container max-w-md mx-auto px-4">
           <Card className="w-full shadow-lg">
             <CardHeader className="space-y-2 pb-6">
-              <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
+              <CardTitle className="text-2xl font-bold text-center">Sign in to SciVenture</CardTitle>
               <CardDescription className="text-center">
-                Welcome back! Sign in to your account
+                Enter your credentials to access your account
               </CardDescription>
             </CardHeader>
             <CardContent className="pb-6">
@@ -97,11 +103,19 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    data-testid="input-email"
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+                    <a 
+                      href="#" 
+                      className="text-sm font-medium text-primary hover:underline"
+                    >
+                      Forgot password?
+                    </a>
+                  </div>
                   <Input 
                     id="password"
                     name="password"
@@ -110,16 +124,15 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    data-testid="input-password"
+                    className="h-10"
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full mt-2" 
+                  className="w-full h-11 mt-2" 
                   disabled={isLoading}
-                  data-testid="button-signin"
                 >
-                  {isLoading ? 'Signing in...' : 'Sign In'}
+                  {isLoading ? 'Signing in...' : 'Sign in'}
                 </Button>
               </form>
             </CardContent>
@@ -129,16 +142,19 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                 <a 
                   href="/register" 
                   className="font-medium text-primary hover:underline"
-                  data-testid="link-signup"
                 >
                   Sign up
                 </a>
+              </div>
+              <div className="text-center text-xs text-gray-500">
+                By continuing, you agree to our Terms of Service and Privacy Policy
               </div>
             </CardFooter>
           </Card>
         </div>
       </main>
 
+      {/* Simple footer */}
       <footer className="bg-white border-t border-gray-200 py-6">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
           &copy; {new Date().getFullYear()} SciVenture. All rights reserved.

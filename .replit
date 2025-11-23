@@ -33,11 +33,9 @@ build = ["npm", "run", "build"]
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 42805
+externalPort = 3000
+
 [agent]
 expertMode = true
-
-[userenv]
-
-[userenv.shared]
-VITE_SUPABASE_URL = "https://pkypzlkvapabkbhlvyjg.supabase.co"
-VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBreXB6bGt2YXBhYmtiaGx2eWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NTc2MzcsImV4cCI6MjA3ODUzMzYzN30.d2MKzYYHGXtbNu4TzHDu596sndcfRnyaojHZMpWgt-4"

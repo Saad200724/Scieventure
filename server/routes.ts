@@ -15,11 +15,6 @@ import {
 import { simplifyText, analyzeResearchPaper, translateContent, deepResearch } from "./ai";
 import { analyzeFileWithAI } from "./file-processor";
 
-// Supabase configuration for development user verification
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
-
 // PDF generation functions
 function generateBiologyLabManualPDF(): string {
   const content = `EXPERIMENTAL BIOLOGY LAB MANUAL
@@ -318,63 +313,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid user data", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to create user" });
-    }
-  });
-  
-  // Registration endpoint - handles Supabase signup server-side
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const { email, password, fullName, username } = req.body;
-      
-      if (!email || !password || !fullName || !username) {
-        return res.status(400).json({ message: "Missing required fields" });
-      }
-      
-      // Get credentials from environment (can be VITE_ or regular env vars)
-      const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-      const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-      
-      console.log('Supabase URL:', supabaseUrl ? 'set' : 'missing');
-      console.log('Supabase Key:', supabaseKey ? 'set' : 'missing');
-      
-      if (!supabaseUrl || !supabaseKey) {
-        console.error('Missing Supabase credentials in environment');
-        return res.status(500).json({ message: "Server configuration error" });
-      }
-      
-      // Call Supabase REST API directly to signup
-      const signupResponse = await fetch(`${supabaseUrl}/auth/v1/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseKey,
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          user_metadata: {
-            full_name: fullName,
-            username: username,
-          }
-        })
-      });
-      
-      const signupData = await signupResponse.json();
-      
-      if (!signupResponse.ok) {
-        console.error('Supabase signup error:', signupData);
-        return res.status(signupResponse.status).json({ 
-          message: signupData.message || "Registration failed" 
-        });
-      }
-      
-      res.status(201).json({ 
-        message: "Registration successful. Please check your email to verify your account.",
-        user: signupData.user 
-      });
-    } catch (error: any) {
-      console.error('Registration error:', error);
-      res.status(500).json({ message: error.message || "Registration failed" });
     }
   });
   
@@ -691,73 +629,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: "An error occurred while processing your file" 
-      });
-    }
-  });
-
-  // Development endpoint to auto-confirm email (bypasses email verification in dev)
-  app.post("/api/auth/confirm-email", async (req, res) => {
-    try {
-      const { email } = req.body;
-      
-      if (!email) {
-        return res.status(400).json({ error: "Email is required" });
-      }
-
-      // Only allow in development
-      if (process.env.NODE_ENV !== "development") {
-        return res.status(403).json({ error: "This endpoint is only available in development" });
-      }
-
-      // Try to confirm email using Supabase admin API
-      // Note: This requires SERVICE_ROLE_KEY which should be provided
-      const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-      
-      if (!serviceRoleKey) {
-        // If no service role key, just return success - user will need to verify email manually
-        console.log("No service role key available. Email confirmation skipped.");
-        return res.status(200).json({ 
-          success: true, 
-          message: "User account created. Email confirmation required." 
-        });
-      }
-
-      if (!SUPABASE_URL) {
-        return res.status(500).json({ error: "Supabase URL not configured" });
-      }
-
-      // Use Supabase admin API to mark email as confirmed
-      const confirmResponse = await fetch(
-        `${SUPABASE_URL}/auth/v1/admin/users`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": serviceRoleKey,
-            "Authorization": `Bearer ${serviceRoleKey}`,
-          },
-          body: JSON.stringify({
-            email,
-            email_confirm: true,
-          }),
-        }
-      );
-
-      if (!confirmResponse.ok) {
-        const errorData = await confirmResponse.json();
-        console.log("Email confirmation attempt:", errorData);
-        // Continue anyway - user might already exist
-      }
-
-      res.status(200).json({ 
-        success: true, 
-        message: "Email confirmed successfully" 
-      });
-    } catch (error: any) {
-      console.error("Error confirming email:", error);
-      res.status(500).json({ 
-        success: false, 
-        error: error.message || "Failed to confirm email" 
       });
     }
   });

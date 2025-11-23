@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { authService } from '@/lib/auth';
+import { signUp } from '@/lib/supabase';
 import sciVentureLogo from '@assets/SciVenture.png';
 
 interface RegisterProps {
@@ -24,6 +24,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
     confirmPassword: '',
   });
 
+  // Set document title
   useEffect(() => {
     document.title = "Create Account - SciVenture";
   }, []);
@@ -45,40 +46,37 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
       return;
     }
     
-    if (formData.password.length < 6) {
-      toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
-
+    
     try {
-      const result = await authService.signUp(
-        formData.email,
-        formData.password,
-        formData.fullName,
-        formData.username
-      );
-
-      if (!result.success) {
-        throw new Error(result.error || 'Registration failed');
+      // Register the user with Supabase authentication
+      const { data, error } = await signUp(formData.email, formData.password, {
+        full_name: formData.fullName,
+        username: formData.username
+      });
+      
+      if (error) {
+        throw error;
       }
-
+      
+      // Note: User profile creation in Firebase is handled by the auth listener in App.tsx
+      // This ensures data consistency between Supabase auth and Firebase database
+      
       setIsLoading(false);
       toast({
         title: "Registration successful",
-        description: result.message || "Your account has been created. Please check your email for verification.",
+        description: "Your account has been created. Please check your email for verification.",
       });
-
+      
+      // Call the onRegisterSuccess callback if provided
       if (onRegisterSuccess) {
         onRegisterSuccess();
+        // Redirect to login page after successful registration
+        setLocation('/login');
+      } else {
+        // Fallback if callback not provided
+        setLocation('/login');
       }
-      
-      setLocation('/login');
     } catch (error: any) {
       setIsLoading(false);
       toast({
@@ -91,6 +89,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Simple header with logo */}
       <header className="bg-white border-b border-gray-200 py-4">
         <div className="container mx-auto px-4">
           <a href="/" className="flex items-center">
@@ -123,7 +122,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.fullName}
                     onChange={handleChange}
-                    data-testid="input-fullname"
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
@@ -136,7 +135,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    data-testid="input-email"
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
@@ -148,7 +147,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.username}
                     onChange={handleChange}
-                    data-testid="input-username"
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
@@ -157,11 +156,11 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="Create a password (min 6 characters)"
+                    placeholder="Create a password"
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    data-testid="input-password"
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
@@ -174,14 +173,13 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    data-testid="input-confirm-password"
+                    className="h-10"
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full mt-2" 
+                  className="w-full h-11 mt-2" 
                   disabled={isLoading}
-                  data-testid="button-register"
                 >
                   {isLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
@@ -193,7 +191,6 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
                 <a 
                   href="/login" 
                   className="font-medium text-primary hover:underline"
-                  data-testid="link-signin"
                 >
                   Sign in
                 </a>
@@ -206,6 +203,7 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
         </div>
       </main>
 
+      {/* Simple footer */}
       <footer className="bg-white border-t border-gray-200 py-6">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
           &copy; {new Date().getFullYear()} SciVenture. All rights reserved.
