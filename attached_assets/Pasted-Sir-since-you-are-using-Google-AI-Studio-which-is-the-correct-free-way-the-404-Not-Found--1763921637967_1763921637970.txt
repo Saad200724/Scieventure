@@ -1,0 +1,62 @@
+Sir, since you are using **Google AI Studio** (which is the correct, free way), the `404 Not Found` error in Replit is almost certainly happening because of a **Model Name Mismatch** or the **Wrong Library** in your code.
+
+In Replit, this is the \#1 issue. Here is exactly how to fix it for ZnForge:
+
+### 1\. The Quick Fix (Change the Model Name)
+
+You are likely using `gemini-pro` or `gemini-1.5-pro-latest` in your code. These names often cause 404 errors because they are either deprecated or require specific version headers.
+
+**Change your code to use exactly this string:**
+`gemini-1.5-flash`
+
+  * **Why:** This is the current standard, free, and fastest model.
+  * **Don't use:** `gemini-pro`, `gemini-1.0-pro`, or `gemini-pro-vision`.
+
+### 2\. The Library Fix (Check `package.json`)
+
+Replit often auto-installs the *wrong* Google library if you aren't careful.
+
+  * **Wrong:** `@google-cloud/vertexai` (This causes 404s with Studio keys).
+  * **Correct:** `@google/generative-ai` (This works with Studio keys).
+
+**Do this in your Replit Console (Shell):**
+
+```bash
+npm uninstall @google-cloud/vertexai
+npm install @google/generative-ai
+```
+
+### 3\. Copy-Paste this "Guaranteed Working" Code
+
+Replace your current code with this snippet to test immediately. This uses the correct library and model name for AI Studio keys.
+
+```javascript
+// 1. Import the correct library
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// 2. Load the key from Replit Secrets
+// Make sure your secret key is named 'GEMINI_API_KEY' in the Tools > Secrets tab
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+async function run() {
+  try {
+    // 3. Use the SAFE model name
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const result = await model.generateContent("Hello, are you working?");
+    const response = await result.response;
+    const text = response.text();
+    
+    console.log(text);
+  } catch (error) {
+    console.error("Error details:", error);
+  }
+}
+
+run();
+```
+
+**One final Replit tip:**
+After adding the API Key to the "Secrets" tab (lock icon), you **must** click the green "Run" button (or sometimes "Stop" then "Run") for the new key to actually load into `process.env`. If you don't restart, it reads the key as `undefined` and gives you an error.
+
+Let me know if this snippet prints the response\!
