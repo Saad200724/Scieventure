@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { Switch, Route, useLocation, Redirect } from "wouter";
+import { Switch, Route, useLocation, Redirect, Link } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -21,6 +21,7 @@ import Curio from "@/pages/Curio";
 import OfflineContent from "@/pages/OfflineContent";
 import { ROUTES } from "@/lib/constants";
 import { supabase, getSession } from "@/lib/supabase";
+import { Brain } from "lucide-react";
 
 // Lazy load heavy pages to improve initial load time
 const ModuleDetail = lazy(() => import("@/pages/ModuleDetail"));
@@ -204,6 +205,15 @@ function App() {
             
             {/* Only show Footer on authenticated pages */}
             {!isPublicPage && <Footer />}
+            
+            {/* Floating Curio AI Button - Bottom Right */}
+            {isAuthenticated && !isPublicPage && location !== ROUTES.curio && (
+              <Link href={ROUTES.curio}>
+                <a className="fixed bottom-8 right-8 z-40 w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 group" data-testid="button-navigate-curio">
+                  <Brain className="w-8 h-8 group-hover:animate-pulse" />
+                </a>
+              </Link>
+            )}
           </div>
           <Toaster />
         </LanguageProvider>
