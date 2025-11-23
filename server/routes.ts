@@ -325,11 +325,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing required fields" });
       }
       
-      const supabaseUrl = process.env.VITE_SUPABASE_URL;
-      const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+      // Get credentials from environment (can be VITE_ or regular env vars)
+      const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+      const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+      
+      console.log('Supabase URL:', supabaseUrl ? 'set' : 'missing');
+      console.log('Supabase Key:', supabaseKey ? 'set' : 'missing');
       
       if (!supabaseUrl || !supabaseKey) {
-        console.error('Missing Supabase credentials');
+        console.error('Missing Supabase credentials in environment');
         return res.status(500).json({ message: "Server configuration error" });
       }
       

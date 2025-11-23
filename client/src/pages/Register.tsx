@@ -48,25 +48,40 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
     setIsLoading(true);
     
     try {
-      // Register the user via backend API (which calls Supabase)
-      const response = await fetch('/api/auth/register', {
+      // Direct Supabase signup
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase is not configured');
+      }
+      
+      console.log('Attempting direct Supabase signup...');
+      
+      const response = await fetch(`${supabaseUrl}/auth/v1/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'apikey': supabaseKey,
         },
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
-          fullName: formData.fullName,
-          username: formData.username
+          user_metadata: {
+            full_name: formData.fullName,
+            username: formData.username,
+          }
         })
       });
       
       const data = await response.json();
       
       if (!response.ok) {
+        console.error('Signup error:', data);
         throw new Error(data.message || 'Registration failed');
       }
+      
+      console.log('Signup successful:', data);
       
       setIsLoading(false);
       toast({
@@ -85,9 +100,10 @@ const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
       }
     } catch (error: any) {
       setIsLoading(false);
+      console.error('Registration error:', error);
       toast({
         title: "Registration failed",
-        description: error.message || "There was a problem creating your account",
+        description: error.message || "There was a problem creating your account. Please try again.",
         variant: "destructive",
       });
     }
