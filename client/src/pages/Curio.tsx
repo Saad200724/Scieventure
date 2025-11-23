@@ -93,7 +93,7 @@ export default function Curio() {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: data.aiResponse || "Sorry, I couldn't generate a response.",
+        content: data.response || data.aiResponse || "Sorry, I couldn't generate a response.",
         timestamp: new Date(),
       };
 
