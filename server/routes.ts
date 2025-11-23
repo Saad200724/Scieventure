@@ -499,6 +499,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "User ID and message are required" });
       }
       
+      // Set timeout for long responses (extend to 60 seconds)
+      res.setTimeout(60000);
+      
       // Get conversation history to maintain context
       const history: CurioMessage[] = (conversationHistory || []).map((msg: any) => ({
         role: msg.role,
@@ -513,6 +516,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Generate response from Gemini
       const response = await generateCurioResponse(history);
+      
+      console.log(`Generated Curio response - User: ${userId}, Message length: ${message.length}, Response length: ${response.length}`);
       
       // Store the conversation
       const chatMessage = await storage.createChatMessage({

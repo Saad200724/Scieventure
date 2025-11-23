@@ -84,7 +84,7 @@ export async function generateCurioResponse(
     const chat = model.startChat({
       history: history.length > 0 ? history : undefined,
       generationConfig: {
-        maxOutputTokens: 1024,
+        maxOutputTokens: 4096,
         temperature: 0.7,
       },
     });
@@ -92,6 +92,10 @@ export async function generateCurioResponse(
     // Send only the user message content
     const response = await chat.sendMessage(currentMessage.content);
     const text = response.response.text();
+    
+    // Log response details for debugging
+    console.log(`Gemini response generated - Length: ${text.length} chars`);
+    
     return text;
   } catch (error) {
     console.error("Error generating Curio response:", error);
