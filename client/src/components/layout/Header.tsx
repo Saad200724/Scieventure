@@ -13,17 +13,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, Menu, Bell, Sun, Moon, X } from 'lucide-react';
+import { ChevronDown, Menu, Bell, Sun, Moon, X, LogOut, LayoutDashboard, Wifi } from 'lucide-react';
 import sciVentureLogo from '@assets/SciVenture.png';
 import { supabase, getUser } from '@/lib/supabase';
 
 const Header: React.FC = () => {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   
   // Get the user info from Supabase
   useEffect(() => {
@@ -52,6 +53,13 @@ const Header: React.FC = () => {
   }, []);
   
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('supabase_session');
+    setLocation('/');
+    setProfileMenuOpen(false);
+  };
   
   // Close mobile menu when changing routes
   useEffect(() => {
@@ -133,14 +141,33 @@ const Header: React.FC = () => {
             </Button>
           )}
           
-          {/* User Avatar - Desktop */}
-          <Link href="/dashboard">
-            <div className="hidden sm:flex h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-primary text-white flex items-center justify-center text-xs sm:text-sm font-semibold cursor-pointer">
-              {supabaseUser?.user_metadata?.full_name ? 
-                supabaseUser.user_metadata.full_name.charAt(0).toUpperCase() : 
-                'S'}
-            </div>
-          </Link>
+          {/* User Avatar - Desktop with Profile Dropdown */}
+          <DropdownMenu open={profileMenuOpen} onOpenChange={setProfileMenuOpen}>
+            <DropdownMenuTrigger asChild className="hidden sm:block">
+              <button 
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-primary text-white flex items-center justify-center text-xs sm:text-sm font-semibold cursor-pointer hover:opacity-80 transition-opacity"
+                data-testid="button-profile"
+              >
+                {supabaseUser?.user_metadata?.full_name ? 
+                  supabaseUser.user_metadata.full_name.charAt(0).toUpperCase() : 
+                  'S'}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => { setLocation('/dashboard'); setProfileMenuOpen(false); }} data-testid="button-profile-dashboard">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => { setLocation('/offline-content'); setProfileMenuOpen(false); }} data-testid="button-profile-offline">
+                <Wifi className="mr-2 h-4 w-4" />
+                <span>Offline Content</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile Layout: Language, Profile, Menu (rightmost) */}
           {/* Language Toggle - Mobile visible */}
@@ -148,14 +175,33 @@ const Header: React.FC = () => {
             <LanguageToggle className="p-1" />
           </div>
           
-          {/* User Avatar - Mobile */}
-          <Link href="/dashboard">
-            <div className="md:hidden h-7 w-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-semibold cursor-pointer">
-              {supabaseUser?.user_metadata?.full_name ? 
-                supabaseUser.user_metadata.full_name.charAt(0).toUpperCase() : 
-                'S'}
-            </div>
-          </Link>
+          {/* User Avatar - Mobile with Profile Dropdown */}
+          <DropdownMenu open={profileMenuOpen} onOpenChange={setProfileMenuOpen}>
+            <DropdownMenuTrigger asChild className="md:hidden">
+              <button 
+                className="h-7 w-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-semibold cursor-pointer hover:opacity-80 transition-opacity"
+                data-testid="button-profile-mobile"
+              >
+                {supabaseUser?.user_metadata?.full_name ? 
+                  supabaseUser.user_metadata.full_name.charAt(0).toUpperCase() : 
+                  'S'}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => { setLocation('/dashboard'); setProfileMenuOpen(false); }} data-testid="button-profile-dashboard-mobile">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => { setLocation('/offline-content'); setProfileMenuOpen(false); }} data-testid="button-profile-offline-mobile">
+                <Wifi className="mr-2 h-4 w-4" />
+                <span>Offline Content</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout} data-testid="button-logout-mobile">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile Menu Button - Rightmost */}
           <Button
