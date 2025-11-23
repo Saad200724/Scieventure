@@ -4,7 +4,7 @@ import { NAV_ITEMS } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone, ArrowRight } from 'lucide-react';
-import sciVentureLogo from '@assets/SciVenture.png';
+import sciVentureLogoWhite from '@assets/SciVenture_white.png';
 import { useToast } from '@/hooks/use-toast';
 
 const Footer: React.FC = () => {
@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
             <div className="lg:col-span-2">
               <div className="mb-6">
                 <img 
-                  src={sciVentureLogo} 
+                  src={sciVentureLogoWhite} 
                   alt="SciVenture Logo" 
                   className="h-14 w-auto hover:scale-105 transition-transform" 
                 />
@@ -113,7 +113,7 @@ const Footer: React.FC = () => {
                   <li key={item.path}>
                     <Link href={item.path}>
                       <div className="text-gray-300 hover:text-white text-sm transition-colors duration-200 cursor-pointer hover:translate-x-1 transform transition-transform">
-                        {item.label}
+                        {item.labelEn}
                       </div>
                     </Link>
                   </li>
