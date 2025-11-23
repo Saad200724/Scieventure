@@ -37,11 +37,9 @@ function App() {
     location === "/login" || 
     location === "/register";
 
-  // Check for an existing session when the app loads
+  // Check for an existing session when the app loads (non-blocking)
   useEffect(() => {
     async function checkSession() {
-      setLoading(true);
-      
       // First check for existing session in local storage to avoid flicker
       const storedSession = localStorage.getItem('supabase_session');
       if (storedSession) {
@@ -50,11 +48,16 @@ function App() {
           if (sessionData && Date.now() < sessionData.expiresAt) {
             setIsAuthenticated(true);
             setUser(sessionData.user);
+            setLoading(false);
+            return;
           }
         } catch (e) {
           console.error("Error parsing stored session:", e);
         }
       }
+      
+      // If no valid cached session, mark loading as done and validate in background
+      setLoading(false);
       
       // Then validate with the actual Supabase session
       const { data, error } = await getSession();
@@ -72,8 +75,6 @@ function App() {
         console.error("Session error:", error);
         localStorage.removeItem('supabase_session');
       }
-      
-      setLoading(false);
     }
     
     checkSession();
