@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import sciVentureLogo from '@assets/SciVenture.png';
+import sciVentureLogoWhite from '@assets/SciVenture_white.png';
 import heroImage from '@assets/Landing_HeroSection.jpg';
 import LanguageToggle from '@/components/ui/language-toggle';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
 
 const Landing: React.FC = () => {
   const { t } = useLanguage();
@@ -36,23 +38,28 @@ const Landing: React.FC = () => {
   }, [t]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header for Landing */}
-      <header className="bg-white border-b border-gray-200 py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950">
+      {/* Header for Landing - Premium Style */}
+      <header className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3 flex justify-between items-center">
           <div className="flex items-center">
             <img 
               src={sciVentureLogo} 
               alt="SciVenture Logo" 
-              className="h-12 w-auto" 
+              className="h-8 w-auto sm:h-10" 
             />
           </div>
-          <div className="flex items-center gap-3">
-            <LanguageToggle />
-            <Button asChild variant="outline" className="mr-2">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="sm:hidden">
+              <LanguageToggle className="p-0.5 scale-75" />
+            </div>
+            <div className="hidden sm:block">
+              <LanguageToggle className="p-1" />
+            </div>
+            <Button asChild variant="outline" size="sm" className="text-xs sm:text-sm px-2 sm:px-3 h-8 sm:h-9">
               <Link href="/login">{t("Sign In", "সাইন ইন")}</Link>
             </Button>
-            <Button asChild>
+            <Button asChild size="sm" className="text-xs sm:text-sm px-2 sm:px-3 h-8 sm:h-9">
               <Link href="/register">{t("Sign Up", "নিবন্ধন করুন")}</Link>
             </Button>
           </div>
@@ -60,9 +67,14 @@ const Landing: React.FC = () => {
       </header>
 
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="relative py-12 md:py-20 overflow-hidden bg-gradient-to-b from-primary/90 to-primary">
-          <div className="absolute inset-0 bg-grid-white/20 opacity-20"></div>
+        {/* Hero Section - Premium Gradient */}
+        <section className="relative py-12 md:py-24 lg:py-28 overflow-hidden bg-gradient-to-br from-blue-600 via-blue-600 to-indigo-700 dark:from-blue-900 dark:via-blue-950 dark:to-indigo-950">
+          {/* Decorative blurred elements */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300/10 rounded-full blur-3xl"></div>
+          </div>
+          <div className="absolute inset-0 bg-grid-white/5 opacity-20"></div>
           <div className="container px-4 mx-auto relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-8 justify-between">
               <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -275,53 +287,127 @@ const Landing: React.FC = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-primary">
-          <div className="container px-4 mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Begin Your Science Journey?</h2>
-            <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-              Join SciVenture today and discover a new way to learn and engage with science education
+        {/* CTA Section - Premium */}
+        <section className="relative py-20 md:py-28 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-indigo-950">
+          {/* Decorative blurred elements */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-300/10 rounded-full blur-3xl"></div>
+          </div>
+          <div className="container px-4 mx-auto text-center relative z-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">{t("Ready to Begin Your Science Journey?", "আপনার বিজ্ঞান যাত্রা শুরু করতে প্রস্তুত?")}</h2>
+            <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto">
+              {t(
+                "Join SciVenture today and discover a new way to learn and engage with science education",
+                "আজই সায়েন্স ভেঞ্চারে যোগ দিন এবং বিজ্ঞান শিক্ষার সাথে শেখার এবং জড়িত হওয়ার একটি নতুন উপায় আবিষ্কার করুন"
+              )}
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 font-medium shadow-md">
-                <Link href="/login">Sign In</Link>
+              <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-white/90 font-semibold shadow-lg">
+                <Link href="/login">{t("Sign In", "সাইন ইন")}</Link>
               </Button>
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 font-medium shadow-md">
-                <Link href="/register">Create Account</Link>
+              <Button asChild size="lg" className="bg-white/20 text-white hover:bg-white/30 border border-white/40 font-semibold shadow-lg backdrop-blur-sm">
+                <Link href="/register">{t("Create Account", "একটি অ্যাকাউন্ট তৈরি করুন")}</Link>
               </Button>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer for Landing */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">About SciVenture</h3>
-              <p className="text-gray-400">
-                Bridging the science education gap through interactive learning, collaboration, and AI assistance.
-              </p>
+      {/* Footer for Landing - Premium */}
+      <footer className="relative bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
+        {/* Decorative background gradient */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative">
+          {/* Main Footer Content */}
+          <div className="container mx-auto px-4 py-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+              {/* Brand Section */}
+              <div className="lg:col-span-2">
+                <div className="mb-6">
+                  <img 
+                    src={sciVentureLogoWhite} 
+                    alt="SciVenture Logo" 
+                    className="h-12 w-auto hover:scale-105 transition-transform" 
+                  />
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed mb-6 max-w-xs">
+                  {t(
+                    "Bridging the science education gap through interactive learning, collaboration, and AI-powered assistance.",
+                    "ইন্টারঅ্যাকটিভ শিক্ষা, সহযোগিতা এবং AI-চালিত সহায়তার মাধ্যমে বিজ্ঞান শিক্ষার ব্যবধান দূর করা।"
+                  )}
+                </p>
+                <div className="flex gap-3">
+                  <a href="#" className="h-10 w-10 rounded-full bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <Facebook className="h-5 w-5 text-blue-400" />
+                  </a>
+                  <a href="#" className="h-10 w-10 rounded-full bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <Twitter className="h-5 w-5 text-blue-400" />
+                  </a>
+                  <a href="#" className="h-10 w-10 rounded-full bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <Instagram className="h-5 w-5 text-blue-400" />
+                  </a>
+                  <a href="#" className="h-10 w-10 rounded-full bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <Linkedin className="h-5 w-5 text-blue-400" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-white mb-6 pb-3 border-b border-white/10">{t("Quick Links", "দ্রুত লিংক")}</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <a href="#features" className="text-gray-300 hover:text-white text-sm transition-colors duration-200 cursor-pointer hover:translate-x-1 transform transition-transform">
+                      {t("Features", "বৈশিষ্ট্য")}
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors duration-200 cursor-pointer hover:translate-x-1 transform transition-transform">
+                      {t("About Us", "আমাদের সম্পর্কে")}
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors duration-200 cursor-pointer hover:translate-x-1 transform transition-transform">
+                      {t("Contact", "যোগাযোগ")}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Legal */}
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-white mb-6 pb-3 border-b border-white/10">{t("Legal", "আইনি")}</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors duration-200 cursor-pointer hover:translate-x-1 transform transition-transform">
+                      {t("Terms of Service", "সেবা শর্তাবলী")}
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors duration-200 cursor-pointer hover:translate-x-1 transform transition-transform">
+                      {t("Privacy Policy", "গোপনীয়তা নীতি")}
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li><a href="#features" className="text-gray-400 hover:text-white">Features</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">About Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Contact</a></li>
-              </ul>
+
+            {/* Bottom Divider */}
+            <div className="border-t border-white/10 my-8"></div>
+
+            {/* Footer Bottom */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-gray-400 text-sm">&copy; {new Date().getFullYear()} SciVenture. {t("All rights reserved.", "সর্বস্বত্ব সংরক্ষিত।")}</p>
+              <div className="flex flex-wrap justify-center md:justify-end gap-6 text-sm">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">{t("Privacy Policy", "গোপনীয়তা নীতি")}</a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">{t("Terms of Service", "সেবা শর্তাবলী")}</a>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white">Terms of Service</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
-            <p>&copy; {new Date().getFullYear()} SciVenture. All rights reserved.</p>
           </div>
         </div>
       </footer>
