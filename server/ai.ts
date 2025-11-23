@@ -117,25 +117,21 @@ const scienceKnowledge: { [key: string]: string } = {
 
 // Provide friendly, conversational responses with scientific information
 export async function simplifyText(userMessage: string): Promise<string> {
-  const messageLoq = userMessage.toLowerCase().trim();
-  
-  // Try to find matching keywords in our knowledge base
-  for (const [keyword, response] of Object.entries(scienceKnowledge)) {
-    if (messageLoq.includes(keyword)) {
-      console.log(`Curio responded using local knowledge for: ${keyword}`);
-      return response;
-    }
-  }
-
-  // Try API if available
+  // PRIORITY 1: Try Gemini API FIRST for detailed, generated responses
+  console.log("Attempting Gemini API for:", userMessage.substring(0, 50));
   try {
     const prompt = `
     You are Curio, a friendly and enthusiastic AI assistant for SciVenture, a science learning platform designed specifically for Bangladeshi students.
+    
     Respond to: "${userMessage}"
-    - Be friendly and personable
-    - Use simple language and fun analogies
-    - Keep it relevant to Bangladeshi students
-    - Inspire them about science careers
+    
+    Guidelines:
+    - Be friendly, personable, and enthusiastic
+    - Use simple language and fun analogies that Bangladeshi students understand
+    - Include relevant examples from Bangladesh (rice paddies, monsoons, local scientists, etc.)
+    - Provide detailed, informative answers (2-3 paragraphs)
+    - Inspire them about science careers and opportunities in Bangladesh
+    - End with an encouraging question to deepen their learning
     `;
 
     try {
@@ -144,16 +140,26 @@ export async function simplifyText(userMessage: string): Promise<string> {
         safetySettings,
       });
       const response = result.response;
-      return response.text();
-    } catch (apiError) {
-      // API failed, use generic response
-      console.log("API not available, using local knowledge base");
+      const apiResponse = response.text();
+      console.log("✓ Gemini API generated response successfully");
+      return apiResponse;
+    } catch (apiError: any) {
+      console.log("✗ Gemini API error:", apiError?.message || apiError);
     }
-  } catch (error) {
-    console.log("Error attempting API:", error);
+  } catch (error: any) {
+    console.log("Error attempting Gemini API:", error?.message || error);
   }
 
-  // Friendly fallback responses when knowledge base doesn't match
+  // PRIORITY 2: Fall back to local knowledge base
+  const messageLoq = userMessage.toLowerCase().trim();
+  for (const [keyword, response] of Object.entries(scienceKnowledge)) {
+    if (messageLoq.includes(keyword)) {
+      console.log(`Curio responded using local knowledge for: ${keyword}`);
+      return response;
+    }
+  }
+
+  // PRIORITY 3: Friendly fallback responses
   const fallbackResponses = [
     "That's an interesting question! While I don't have specific information on that topic right now, I encourage you to explore it further in your textbooks or research materials. Science is all about curious minds like yours asking questions!",
     "Great question! I'm Curio, your science buddy. For this particular question, I'd suggest checking your course materials or asking your teacher - they might have more detailed information. But keep asking questions, that's how science works!",
