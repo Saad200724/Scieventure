@@ -103,7 +103,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Built with React and Express
+- Built with React and Express Js
 - Authentication powered by Supabase
 - Database functionality by Supabase
 - UI components from Radix UI and shadcn/ui
