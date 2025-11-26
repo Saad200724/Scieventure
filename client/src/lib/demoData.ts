@@ -1,4 +1,4 @@
-// Demo data for all pages - using direct image paths
+// Demo data for all pages - using direct asset paths
 export const DEMO_MODULES = [
   {
     id: 1,
@@ -8,7 +8,7 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 45,
     lessons: 8,
-    thumbnail: new URL('@assets/generated_images/web_of_life_ecosystem_forest.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/web_of_life_ecosystem_forest.png",
     rating: 4.8,
     studentCount: 1240,
     progress: 0
@@ -21,7 +21,7 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 60,
     lessons: 10,
-    thumbnail: new URL('@assets/generated_images/photosynthesis_plant_power_leaves.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/photosynthesis_plant_power_leaves.png",
     rating: 4.9,
     studentCount: 890,
     progress: 0
@@ -34,7 +34,7 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 50,
     lessons: 9,
-    thumbnail: new URL('@assets/generated_images/atomic_structure_basics_atoms.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/atomic_structure_basics_atoms.png",
     rating: 4.7,
     studentCount: 1567,
     progress: 0
@@ -47,7 +47,7 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 75,
     lessons: 12,
-    thumbnail: new URL('@assets/generated_images/chemical_reactions_lab_experiment.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/chemical_reactions_lab_experiment.png",
     rating: 4.6,
     studentCount: 2034,
     progress: 0
@@ -60,7 +60,7 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 55,
     lessons: 11,
-    thumbnail: new URL('@assets/generated_images/physics_of_motion_forces.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/physics_of_motion_forces.png",
     rating: 4.9,
     studentCount: 1456,
     progress: 0
@@ -73,7 +73,7 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 50,
     lessons: 8,
-    thumbnail: new URL('@assets/generated_images/energy_heat_transfer_waves.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/energy_heat_transfer_waves.png",
     rating: 4.8,
     studentCount: 934,
     progress: 0
@@ -96,7 +96,7 @@ export const DEMO_PROJECTS = [
     ],
     endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
     location: "All Bangladesh",
-    thumbnail: new URL('@assets/generated_images/climate_monitoring_bangladesh_data.png', import.meta.url).href
+    thumbnail: "/assets/generated_images/climate_monitoring_bangladesh_data.png"
   },
   {
     id: 2,
@@ -113,7 +113,7 @@ export const DEMO_PROJECTS = [
     ],
     endDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
     location: "Major Cities",
-    thumbnail: new URL('@assets/generated_images/urban_air_quality_study_stations.png', import.meta.url).href
+    thumbnail: "/assets/generated_images/urban_air_quality_study_stations.png"
   },
   {
     id: 3,
@@ -130,7 +130,7 @@ export const DEMO_PROJECTS = [
     ],
     endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
     location: "Rural Areas",
-    thumbnail: new URL('@assets/generated_images/renewable_energy_research_sources.png', import.meta.url).href
+    thumbnail: "/assets/generated_images/renewable_energy_research_sources.png"
   },
   {
     id: 4,
@@ -146,7 +146,7 @@ export const DEMO_PROJECTS = [
     ],
     endDate: new Date(Date.now() + 75 * 24 * 60 * 60 * 1000),
     location: "Various Regions",
-    thumbnail: new URL('@assets/generated_images/biodiversity_survey_species.png', import.meta.url).href
+    thumbnail: "/assets/generated_images/biodiversity_survey_species.png"
   },
   {
     id: 5,
@@ -163,7 +163,7 @@ export const DEMO_PROJECTS = [
     ],
     endDate: new Date(Date.now() + 55 * 24 * 60 * 60 * 1000),
     location: "Local Sources",
-    thumbnail: new URL('@assets/generated_images/urban_air_quality_study_stations.png', import.meta.url).href
+    thumbnail: "/assets/generated_images/urban_air_quality_study_stations.png"
   },
   {
     id: 6,
@@ -179,7 +179,7 @@ export const DEMO_PROJECTS = [
     ],
     endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000),
     location: "All Bangladesh",
-    thumbnail: new URL('@assets/generated_images/renewable_energy_research_sources.png', import.meta.url).href
+    thumbnail: "/assets/generated_images/renewable_energy_research_sources.png"
   }
 ];
 
@@ -191,7 +191,7 @@ export const DEMO_RESOURCES = [
     subject: "Biology",
     fileSize: "4.2 MB",
     downloadCount: 523,
-    thumbnail: new URL('@assets/generated_images/biology_lab_manual_scientific.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/biology_lab_manual_scientific.png",
     tags: ["lab", "manual", "practical"],
     filePath: "/resources/bio-manual.pdf"
   },
@@ -202,7 +202,7 @@ export const DEMO_RESOURCES = [
     subject: "Chemistry",
     fileSize: "2.8 MB",
     downloadCount: 687,
-    thumbnail: new URL('@assets/generated_images/chemistry_formula_handbook_reference.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/chemistry_formula_handbook_reference.png",
     tags: ["formula", "reference", "handbook"],
     filePath: "/resources/chem-handbook.pdf"
   },
@@ -213,7 +213,7 @@ export const DEMO_RESOURCES = [
     subject: "Physics",
     fileSize: "3.5 MB",
     downloadCount: 445,
-    thumbnail: new URL('@assets/generated_images/physics_problem_guide_solutions.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/physics_problem_guide_solutions.png",
     tags: ["formula", "problems", "solutions"],
     filePath: "/resources/physics-guide.pdf"
   },
@@ -224,7 +224,7 @@ export const DEMO_RESOURCES = [
     subject: "Mathematics",
     fileSize: "1.9 MB",
     downloadCount: 891,
-    thumbnail: new URL('@assets/generated_images/mathematics_cheat_sheet_formulas.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/mathematics_cheat_sheet_formulas.png",
     tags: ["formula", "reference", "quick"],
     filePath: "/resources/math-sheet.pdf"
   },
@@ -235,7 +235,7 @@ export const DEMO_RESOURCES = [
     subject: "General Science",
     fileSize: "5.1 MB",
     downloadCount: 334,
-    thumbnail: new URL('@assets/generated_images/scientific_method_workbook_procedures.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/scientific_method_workbook_procedures.png",
     tags: ["worksheet", "practical", "methods"],
     filePath: "/resources/method-workbook.pdf"
   },
@@ -246,7 +246,7 @@ export const DEMO_RESOURCES = [
     subject: "Environmental Science",
     fileSize: "6.3 MB",
     downloadCount: 412,
-    thumbnail: new URL('@assets/generated_images/environmental_science_guide_nature.png', import.meta.url).href,
+    thumbnail: "/assets/generated_images/environmental_science_guide_nature.png",
     tags: ["textbook", "reference", "guide"],
     filePath: "/resources/env-guide.pdf"
   }
