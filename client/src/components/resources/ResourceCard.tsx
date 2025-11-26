@@ -150,11 +150,11 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col">
       <div className="sm:flex h-full">
         {/* Image - Full width on mobile, 1/3 width on larger screens */}
-        <div className="sm:w-1/3 flex-shrink-0">
+        <div className="sm:w-1/3 flex-shrink-0 aspect-video sm:aspect-auto">
           <img 
             src={thumbnail || '/placeholder-resource.jpg'} 
             alt={title} 
-            className="h-48 sm:h-full w-full object-cover" 
+            className="w-full h-full object-cover" 
           />
         </div>
 
