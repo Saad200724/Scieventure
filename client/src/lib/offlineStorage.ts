@@ -270,20 +270,21 @@ export const deleteOfflineContent = async (id: number, type: 'document' | 'video
             console.log(`Successfully deleted ${type} with id ${id} from IndexedDB`);
             // Also update localStorage
             removeFromLocalStorageMetadata(id, type);
-            db.close();
             resolve(true);
           };
           
           deleteRequest.onerror = () => {
             console.error(`Failed to delete ${type} with id ${id}:`, deleteRequest.error);
-            db.close();
             resolve(false);
           };
           
           transaction.onerror = () => {
             console.error("Transaction error:", transaction.error);
-            db.close();
             resolve(false);
+          };
+          
+          transaction.oncomplete = () => {
+            db.close();
           };
         } catch (e) {
           console.error("Error in delete transaction:", e);
