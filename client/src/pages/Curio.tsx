@@ -49,20 +49,13 @@ export default function Curio() {
 
   const initialGreeting = getInitialGreeting();
 
-  // Get initial greeting message based on language
-  const getInitialMessage = () => {
-    if (language === "bn") {
-      return `আসসালামু আলাইকুম, ${initialGreeting}! আমি কিউরিও, তোমার বিজ্ঞান শেখার সঙ্গী। আমি তোমাকে বিজ্ঞানের ধারণাগুলি বুঝতে সাহায্য করতে এখানে আছি। আজ তুমি কী শিখতে চাও?`;
-    }
-    return `Hello, ${initialGreeting}! I'm Curio, your science learning companion. I'm here to help you explore and understand science concepts. What would you like to learn about today?`;
-  };
-
   // Chat Tab State
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "assistant",
-      content: getInitialMessage(),
+      content:
+        `Hello, ${initialGreeting}! I'm Curio, your science learning companion. I'm here to help you explore and understand science concepts. What would you like to learn about today?`,
       timestamp: new Date(),
     },
   ]);
