@@ -15,6 +15,7 @@ import { Download, FileText, Book, Beaker, AtomIcon } from 'lucide-react';
 import { Resource } from '@shared/schema';
 import { Helmet } from 'react-helmet';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { DEMO_RESOURCES } from '@/lib/demoData';
 
 const Resources: React.FC = () => {
   const { t } = useLanguage();
@@ -22,9 +23,12 @@ const Resources: React.FC = () => {
   const [subjectFilter, setSubjectFilter] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
 
-  const { data: resources, isLoading } = useQuery({
+  const { data: apiResources, isLoading } = useQuery({
     queryKey: ['/api/resources'],
   });
+
+  // Use demo data as fallback
+  const resources = apiResources && apiResources.length > 0 ? apiResources : DEMO_RESOURCES;
 
   // Apply filters
   const filteredResources = React.useMemo(() => {

@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SimulationGames from '@/components/community/SimulationGames';
 import QuantumCoinToss from '@/components/games/QuantumCoinToss';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { DEMO_DISCUSSIONS, DEMO_EVENTS } from '@/lib/demoData';
+import { MessageCircle, Calendar, Users } from 'lucide-react';
 
 const Community: React.FC = () => {
   const { t } = useLanguage();
@@ -30,15 +32,26 @@ const Community: React.FC = () => {
           </TabsList>
           
           <TabsContent value="discussions">
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-xl font-semibold mb-4">{t("Science Discussions", "বিজ্ঞান আলোচনা")}</h2>
-                <p className="text-gray-600 mb-6">{t("Join conversations about various scientific topics with students and educators.", "ছাত্রছাত্রী এবং শিক্ষকদের সাথে বিভিন্ন বৈজ্ঞানিক বিষয়ে কথোপকথনে যোগ দিন।")}</p>
-                <div className="text-center p-8 text-gray-500">
-                  {t("Discussion forums will be available soon!", "আলোচনা ফোরাম শীঘ্রই উপলব্ধ হবে!")}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">{t("Science Discussions", "বিজ্ঞান আলোচনা")}</h2>
+              {DEMO_DISCUSSIONS.map((discussion) => (
+                <Card key={discussion.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="text-2xl">{discussion.avatar}</div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-1">{discussion.title}</h3>
+                        <p className="text-sm text-gray-600 mb-2">by {discussion.author}</p>
+                        <div className="flex gap-4 text-sm text-gray-500">
+                          <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" /> {discussion.replies} replies</span>
+                          <span className="flex items-center gap-1"><Users className="w-4 h-4" /> {discussion.views} views</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
           
           <TabsContent value="games" className="space-y-6">
@@ -48,15 +61,28 @@ const Community: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="events">
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-xl font-semibold mb-4">{t("Upcoming Science Events", "আসন্ন বিজ্ঞান ইভেন্ট")}</h2>
-                <p className="text-gray-600 mb-6">{t("Participate in virtual and in-person science events, workshops, and competitions.", "ভার্চুয়াল এবং ব্যক্তিগত বিজ্ঞান ইভেন্ট, ওয়ার্কশপ এবং প্রতিযোগিতায় অংশগ্রহণ করুন।")}</p>
-                <div className="text-center p-8 text-gray-500">
-                  {t("Event calendar will be available soon!", "ইভেন্ট ক্যালেন্ডার শীঘ্রই উপলব্ধ হবে!")}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">{t("Upcoming Science Events", "আসন্ন বিজ্ঞান ইভেন্ট")}</h2>
+              {DEMO_EVENTS.map((event) => (
+                <Card key={event.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-blue-100 rounded-lg">
+                        <Calendar className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
+                        <p className="text-sm text-gray-600 mb-2">{event.description}</p>
+                        <div className="flex gap-4 text-sm text-gray-500">
+                          <span>📅 {event.date.toLocaleDateString()}</span>
+                          <span>📍 {event.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
           
           <TabsContent value="projects">

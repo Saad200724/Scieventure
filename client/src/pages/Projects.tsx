@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { formatProjectWithParticipants } from '@/lib/utils/dataUtils';
 import { Helmet } from 'react-helmet';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { DEMO_PROJECTS } from '@/lib/demoData';
 
 const Projects: React.FC = () => {
   const { t } = useLanguage();
@@ -21,9 +22,12 @@ const Projects: React.FC = () => {
   const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [participationFilter, setParticipationFilter] = useState('all');
 
-  const { data: projects, isLoading } = useQuery({
+  const { data: apiProjects, isLoading } = useQuery({
     queryKey: ['/api/projects'],
   });
+
+  // Use demo data as fallback
+  const projects = apiProjects && apiProjects.length > 0 ? apiProjects : DEMO_PROJECTS;
 
   // Mock participant data (in a real app, this would be fetched from the API)
   const dummyParticipants = [

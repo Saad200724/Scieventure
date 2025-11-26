@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Beaker, Calculator, Atom, TreePine, Star } from 'lucide-react';
+import { DEMO_MODULES } from '@/lib/demoData';
 
 const Modules: React.FC = () => {
   const { t } = useLanguage();
@@ -21,9 +22,12 @@ const Modules: React.FC = () => {
   const [subjectFilter, setSubjectFilter] = useState('all');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
 
-  const { data: modules, isLoading } = useQuery({
+  const { data: apiModules, isLoading } = useQuery({
     queryKey: ['/api/modules'],
   });
+
+  // Use demo data as fallback
+  const modules = apiModules && apiModules.length > 0 ? apiModules : DEMO_MODULES;
 
   // Apply filters
   const filteredModules = React.useMemo(() => {
