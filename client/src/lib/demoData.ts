@@ -256,50 +256,139 @@ export const DEMO_RESOURCES = [
 export const DEMO_DISCUSSIONS = [
   {
     id: 1,
-    title: "How do plants adapt to different seasons?",
-    author: "Maliha Hasan",
-    replies: 12,
-    views: 234,
-    avatar: "👩‍🔬"
+    title: "Understanding wave-particle duality in quantum mechanics",
+    author: "Mahir Ahmed",
+    subject: "Physics",
+    replies: 8,
+    views: 156,
+    timestamp: "11/26/2025, 08:01 PM"
   },
   {
     id: 2,
-    title: "Best practices for conducting chemistry experiments safely",
-    author: "Rahman Siddiqui",
-    replies: 8,
-    views: 156,
-    avatar: "👨‍🔬"
+    title: "Local plant species identification help",
+    author: "Fatima Jahan",
+    subject: "Biology",
+    replies: 15,
+    views: 89,
+    timestamp: "11/25/2025, 10:01 PM"
   },
   {
     id: 3,
-    title: "How can we make physics more interesting in rural schools?",
-    author: "Farhan Ahmed",
-    replies: 15,
-    views: 289,
-    avatar: "👨‍💻"
+    title: "Best practices for conducting chemistry experiments safely",
+    author: "Rahman Siddiqui",
+    replies: 12,
+    views: 234,
+    timestamp: "11/24/2025, 03:45 PM"
+  },
+  {
+    id: 4,
+    title: "How do plants adapt to different seasons?",
+    author: "Maliha Hasan",
+    subject: "Biology",
+    replies: 20,
+    views: 412,
+    timestamp: "11/23/2025, 02:30 PM"
+  },
+  {
+    id: 5,
+    title: "Best resources for learning environmental science?",
+    author: "Nusrat Khan",
+    subject: "Environmental Science",
+    replies: 6,
+    views: 98,
+    timestamp: "11/22/2025, 09:15 AM"
   }
 ];
 
 export const DEMO_EVENTS = [
   {
     id: 1,
-    title: "Science Fair 2025",
+    title: "National Science Fair 2025",
     date: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-    location: "Dhaka Convention Center",
+    dateStr: "Jun 24",
+    time: "9:00 AM - 5:00 PM",
+    location: "Dhaka University Campus",
     description: "Annual science fair showcasing student projects"
   },
   {
     id: 2,
-    title: "Environmental Awareness Workshop",
-    date: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
-    location: "Online",
-    description: "Learn about sustainable practices and conservation"
+    title: "Astronomy Night",
+    date: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000),
+    dateStr: "Jun 30",
+    time: "7:00 PM - 10:00 PM",
+    location: "Chittagong Science Museum",
+    description: "Join us for a night of stargazing and learning"
   },
   {
     id: 3,
-    title: "Astronomy Observation Night",
-    date: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000),
-    location: "Various locations",
-    description: "Join us for a night of stargazing and learning"
+    title: "Environmental Science Workshop",
+    date: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
+    dateStr: "Jul 5",
+    time: "2:00 PM - 4:00 PM",
+    location: "Virtual Event",
+    description: "Learn about sustainable practices and conservation"
+  },
+  {
+    id: 4,
+    title: "Chemistry Lab Practicum",
+    date: new Date(Date.now() + 55 * 24 * 60 * 60 * 1000),
+    dateStr: "Jul 12",
+    time: "10:00 AM - 1:00 PM",
+    location: "DHaka Institute of Technology",
+    description: "Hands-on chemistry experiments and demonstrations"
+  },
+  {
+    id: 5,
+    title: "Physics Olympiad Registration",
+    date: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000),
+    dateStr: "Jul 18",
+    time: "8:00 AM - 6:00 PM",
+    location: "Multiple Centers",
+    description: "Annual physics competition for all grades"
+  }
+];
+
+export const DEMO_CONTRIBUTORS = [
+  {
+    id: 1,
+    name: "Rahman Siddiqui",
+    role: "Physics Teacher",
+    points: 972,
+    initials: "RS"
+  },
+  {
+    id: 2,
+    name: "Nusrat Khan",
+    role: "Biology Researcher",
+    points: 845,
+    initials: "NK"
+  },
+  {
+    id: 3,
+    name: "Anika Hossain",
+    role: "Student",
+    points: 783,
+    initials: "AH"
+  },
+  {
+    id: 4,
+    name: "Kamal Islam",
+    role: "Chemistry Enthusiast",
+    points: 756,
+    initials: "KI"
+  },
+  {
+    id: 5,
+    name: "Sabina Rahman",
+    role: "Math Teacher",
+    points: 721,
+    initials: "SR"
+  },
+  {
+    id: 6,
+    name: "Farhan Ahmed",
+    role: "Environmental Educator",
+    points: 698,
+    initials: "FA"
   }
 ];
