@@ -8,7 +8,10 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 45,
     lessons: 8,
-    thumbnail: "🌿"
+    thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
+    rating: 4.8,
+    studentCount: 1240,
+    progress: 0
   },
   {
     id: 2,
@@ -18,7 +21,10 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 60,
     lessons: 10,
-    thumbnail: "☀️"
+    thumbnail: "https://images.unsplash.com/photo-1530836369250-ef72a3649b8d?w=400&h=300&fit=crop",
+    rating: 4.9,
+    studentCount: 890,
+    progress: 0
   },
   {
     id: 3,
@@ -28,7 +34,10 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 50,
     lessons: 9,
-    thumbnail: "⚛️"
+    thumbnail: "https://images.unsplash.com/photo-1610194352361-4bcd373ce5e1?w=400&h=300&fit=crop",
+    rating: 4.7,
+    studentCount: 1567,
+    progress: 0
   },
   {
     id: 4,
@@ -38,7 +47,10 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 75,
     lessons: 12,
-    thumbnail: "🧪"
+    thumbnail: "https://images.unsplash.com/photo-1530836369250-ef72a3649b8d?w=400&h=300&fit=crop",
+    rating: 4.6,
+    studentCount: 2034,
+    progress: 0
   },
   {
     id: 5,
@@ -48,7 +60,10 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 55,
     lessons: 11,
-    thumbnail: "🚀"
+    thumbnail: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop",
+    rating: 4.9,
+    studentCount: 1456,
+    progress: 0
   },
   {
     id: 6,
@@ -58,7 +73,10 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 50,
     lessons: 8,
-    thumbnail: "🔥"
+    thumbnail: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop",
+    rating: 4.8,
+    studentCount: 934,
+    progress: 0
   }
 ];
 
@@ -69,11 +87,15 @@ export const DEMO_PROJECTS = [
     description: "Monitor temperature, rainfall, and air quality across Bangladesh regions to contribute to climate research.",
     subject: "Environmental Science",
     difficulty: 2,
-    participationType: "Group",
+    participationType: "Open Participation",
     status: "Active",
-    participants: 24,
+    participants: [
+      { firstName: "Rahman", lastName: "Siddiqui", username: "rsiddiqui", initials: "RS" },
+      { firstName: "Maliha", lastName: "Hasan", username: "mhasan", initials: "MH" },
+      { firstName: "Farhan", lastName: "Ahmed", username: "fahmed", initials: "FA" }
+    ],
     endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-    thumbnail: "☁️"
+    location: "All Bangladesh"
   },
   {
     id: 2,
@@ -81,11 +103,15 @@ export const DEMO_PROJECTS = [
     description: "Analyze air pollution levels in major cities and contribute to environmental awareness.",
     subject: "Environmental Science",
     difficulty: 2,
-    participationType: "Group",
+    participationType: "Open Participation",
     status: "Active",
-    participants: 18,
+    participants: [
+      { firstName: "Kabir", lastName: "Ahmed", username: "kahmed", initials: "KA" },
+      { firstName: "Sabrina", lastName: "Rahman", username: "srahman", initials: "SR" },
+      { firstName: "Leena", lastName: "Nur", username: "lnur", initials: "LN" }
+    ],
     endDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-    thumbnail: "💨"
+    location: "Major Cities"
   },
   {
     id: 3,
@@ -93,11 +119,15 @@ export const DEMO_PROJECTS = [
     description: "Investigate sustainable energy solutions and their potential for rural electrification.",
     subject: "Physics",
     difficulty: 3,
-    participationType: "Group",
+    participationType: "Open Participation",
     status: "Active",
-    participants: 32,
+    participants: [
+      { firstName: "Nadia", lastName: "Jahan", username: "njahan", initials: "NJ" },
+      { firstName: "Abdul", lastName: "Basit", username: "abasit", initials: "AB" },
+      { firstName: "Rashid", lastName: "Khan", username: "rkhan", initials: "RK" }
+    ],
     endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    thumbnail: "⚡"
+    location: "Rural Areas"
   },
   {
     id: 4,
@@ -105,11 +135,14 @@ export const DEMO_PROJECTS = [
     description: "Document and catalog local plant and animal species in your region.",
     subject: "Biology",
     difficulty: 2,
-    participationType: "Individual",
+    participationType: "Open Participation",
     status: "Active",
-    participants: 45,
+    participants: [
+      { firstName: "Rahman", lastName: "Siddiqui", username: "rsiddiqui", initials: "RS" },
+      { firstName: "Maliha", lastName: "Hasan", username: "mhasan", initials: "MH" }
+    ],
     endDate: new Date(Date.now() + 75 * 24 * 60 * 60 * 1000),
-    thumbnail: "🦋"
+    location: "Various Regions"
   },
   {
     id: 5,
@@ -117,11 +150,15 @@ export const DEMO_PROJECTS = [
     description: "Test and analyze water samples from local sources to assess environmental health.",
     subject: "Chemistry",
     difficulty: 2,
-    participationType: "Group",
+    participationType: "Open Participation",
     status: "Active",
-    participants: 21,
+    participants: [
+      { firstName: "Farhan", lastName: "Ahmed", username: "fahmed", initials: "FA" },
+      { firstName: "Kabir", lastName: "Ahmed", username: "kahmed", initials: "KA" },
+      { firstName: "Sabrina", lastName: "Rahman", username: "srahman", initials: "SR" }
+    ],
     endDate: new Date(Date.now() + 55 * 24 * 60 * 60 * 1000),
-    thumbnail: "💧"
+    location: "Local Sources"
   },
   {
     id: 6,
@@ -129,11 +166,14 @@ export const DEMO_PROJECTS = [
     description: "Contribute to scientific observations of celestial objects and track astronomical events.",
     subject: "Physics",
     difficulty: 3,
-    participationType: "Individual",
+    participationType: "Open Participation",
     status: "Active",
-    participants: 38,
+    participants: [
+      { firstName: "Leena", lastName: "Nur", username: "lnur", initials: "LN" },
+      { firstName: "Nadia", lastName: "Jahan", username: "njahan", initials: "NJ" }
+    ],
     endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000),
-    thumbnail: "🔭"
+    location: "All Bangladesh"
   }
 ];
 
@@ -145,8 +185,9 @@ export const DEMO_RESOURCES = [
     subject: "Biology",
     fileSize: "4.2 MB",
     downloadCount: 523,
-    thumbnail: "📕",
-    tags: ["lab", "manual", "practical"]
+    thumbnail: "https://images.unsplash.com/photo-150784272343-583f20270319?w=400&h=300&fit=crop",
+    tags: ["lab", "manual", "practical"],
+    filePath: "/resources/bio-manual.pdf"
   },
   {
     id: 2,
@@ -155,8 +196,9 @@ export const DEMO_RESOURCES = [
     subject: "Chemistry",
     fileSize: "2.8 MB",
     downloadCount: 687,
-    thumbnail: "📗",
-    tags: ["formula", "reference", "handbook"]
+    thumbnail: "https://images.unsplash.com/photo-1530836369250-ef72a3649b8d?w=400&h=300&fit=crop",
+    tags: ["formula", "reference", "handbook"],
+    filePath: "/resources/chem-handbook.pdf"
   },
   {
     id: 3,
@@ -165,8 +207,9 @@ export const DEMO_RESOURCES = [
     subject: "Physics",
     fileSize: "3.5 MB",
     downloadCount: 445,
-    thumbnail: "📘",
-    tags: ["formula", "problems", "solutions"]
+    thumbnail: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop",
+    tags: ["formula", "problems", "solutions"],
+    filePath: "/resources/physics-guide.pdf"
   },
   {
     id: 4,
@@ -175,8 +218,9 @@ export const DEMO_RESOURCES = [
     subject: "Mathematics",
     fileSize: "1.9 MB",
     downloadCount: 891,
-    thumbnail: "📙",
-    tags: ["formula", "reference", "quick"]
+    thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+    tags: ["formula", "reference", "quick"],
+    filePath: "/resources/math-sheet.pdf"
   },
   {
     id: 5,
@@ -185,8 +229,9 @@ export const DEMO_RESOURCES = [
     subject: "General Science",
     fileSize: "5.1 MB",
     downloadCount: 334,
-    thumbnail: "📓",
-    tags: ["worksheet", "practical", "methods"]
+    thumbnail: "https://images.unsplash.com/photo-1507842972194-ead604748b89?w=400&h=300&fit=crop",
+    tags: ["worksheet", "practical", "methods"],
+    filePath: "/resources/method-workbook.pdf"
   },
   {
     id: 6,
@@ -195,8 +240,9 @@ export const DEMO_RESOURCES = [
     subject: "Environmental Science",
     fileSize: "6.3 MB",
     downloadCount: 412,
-    thumbnail: "📔",
-    tags: ["textbook", "reference", "guide"]
+    thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
+    tags: ["textbook", "reference", "guide"],
+    filePath: "/resources/env-guide.pdf"
   }
 ];
 

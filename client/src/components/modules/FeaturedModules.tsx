@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronRight } from 'lucide-react';
 import { formatModuleWithProgress } from '@/lib/utils/dataUtils';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { DEMO_MODULES } from '@/lib/demoData';
 
 interface FeaturedModulesProps {
   userId?: number;
@@ -16,9 +17,12 @@ const FeaturedModules: React.FC<FeaturedModulesProps> = ({ userId, limit = 4 }) 
   const { t } = useLanguage();
   
   // Fetch modules
-  const { data: modules, isLoading: modulesLoading } = useQuery({
+  const { data: apiModules, isLoading: modulesLoading } = useQuery({
     queryKey: ['/api/modules'],
   });
+
+  // Use demo data as fallback
+  const modules = apiModules && apiModules.length > 0 ? apiModules : DEMO_MODULES;
 
   // Fetch user progress if userId is provided
   const { data: progressItems, isLoading: progressLoading } = useQuery({

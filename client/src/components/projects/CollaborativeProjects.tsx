@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronRight } from 'lucide-react';
 import { formatProjectWithParticipants } from '@/lib/utils/dataUtils';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { DEMO_PROJECTS } from '@/lib/demoData';
 
 interface CollaborativeProjectsProps {
   limit?: number;
@@ -13,34 +14,30 @@ interface CollaborativeProjectsProps {
 
 const CollaborativeProjects: React.FC<CollaborativeProjectsProps> = ({ limit = 3 }) => {
   const { t } = useLanguage();
-  const { data: projects, isLoading } = useQuery({
+  const { data: apiProjects, isLoading } = useQuery({
     queryKey: ['/api/projects'],
   });
+
+  // Use demo data as fallback
+  const projects = apiProjects && apiProjects.length > 0 ? apiProjects : DEMO_PROJECTS;
 
   const formattedProjects = React.useMemo(() => {
     if (!projects) return [];
     
-    // In a real implementation, we would fetch actual participants
-    // For now, we'll use dummy data
-    const dummyParticipants = [
-      { id: 1, firstName: 'Rahman', lastName: 'Siddiqui', username: 'rsiddiqui' },
-      { id: 2, firstName: 'Maliha', lastName: 'Hasan', username: 'mhasan' },
-      { id: 3, firstName: 'Farhan', lastName: 'Ahmed', username: 'fahmed' },
-      { id: 4, firstName: 'Kabir', lastName: 'Ahmed', username: 'kahmed' },
-      { id: 5, firstName: 'Sabrina', lastName: 'Rahman', username: 'srahman' },
-      { id: 6, firstName: 'Leena', lastName: 'Nur', username: 'lnur' },
-      { id: 7, firstName: 'Nadia', lastName: 'Jahan', username: 'njahan' },
-      { id: 8, firstName: 'Abdul', lastName: 'Basit', username: 'abasit' },
-      { id: 9, firstName: 'Rashid', lastName: 'Khan', username: 'rkhan' }
-    ];
-    
-    return projects.slice(0, limit).map((project: any, index: number) => {
-      // Assign different participants to each project
-      const startIndex = (index * 3) % dummyParticipants.length;
-      const endIndex = Math.min(startIndex + (3 + index), dummyParticipants.length);
-      const projectParticipants = dummyParticipants.slice(startIndex, endIndex);
+    return projects.slice(0, limit).map((project: any) => {
+      // If project already has participants array, use it directly
+      if (project.participants && Array.isArray(project.participants)) {
+        return project;
+      }
       
-      return formatProjectWithParticipants(project, projectParticipants);
+      // Otherwise, use dummy data
+      const dummyParticipants = [
+        { firstName: 'Rahman', lastName: 'Siddiqui', username: 'rsiddiqui' },
+        { firstName: 'Maliha', lastName: 'Hasan', username: 'mhasan' },
+        { firstName: 'Farhan', lastName: 'Ahmed', username: 'fahmed' }
+      ];
+      
+      return formatProjectWithParticipants(project, dummyParticipants);
     });
   }, [projects, limit]);
 
