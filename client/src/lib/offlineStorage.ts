@@ -278,7 +278,7 @@ export const deleteOfflineContent = async (id: number, type: 'document' | 'video
             console.error(`Delete request failed for ${type} with id ${id}:`, deleteRequest.error);
           };
           
-          transaction.onsuccess = () => {
+          transaction.oncomplete = () => {
             console.log(`Transaction success for deleting ${type} with id ${id}`);
             removeFromLocalStorageMetadata(id, type);
             db.close();
