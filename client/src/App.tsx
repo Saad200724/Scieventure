@@ -17,6 +17,7 @@ import Projects from "@/pages/Projects";
 import Resources from "@/pages/Resources";
 import Modules from "@/pages/Modules";
 import Community from "@/pages/Community";
+import Contributors from "@/pages/Contributors";
 import Curio from "@/pages/Curio-Premium";
 import OfflineContent from "@/pages/OfflineContent";
 import ProjectDetail from "@/pages/ProjectDetail";
@@ -194,6 +195,13 @@ function App() {
                 <Route path={ROUTES.community}>
                   {() => (
                     isAuthenticated ? <Community /> : <Redirect to="/login" />
+                  )}
+                </Route>
+                
+                {/* Contributors Page */}
+                <Route path="/contributors">
+                  {() => (
+                    isAuthenticated ? <Contributors /> : <Redirect to="/login" />
                   )}
                 </Route>
                 

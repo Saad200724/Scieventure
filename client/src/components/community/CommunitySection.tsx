@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link } from 'wouter';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { ChevronRight, MessageSquare, Eye, Calendar, MapPin, Clock } from 'lucide-react';
 import { SUBJECT_TAGS } from '@/lib/constants';
 import { formatDate } from '@/lib/utils/dataUtils';
+import { useLanguage } from '@/providers/LanguageProvider';
 import SimulationGames from './SimulationGames';
 import { DEMO_DISCUSSIONS, DEMO_EVENTS, DEMO_CONTRIBUTORS } from '@/lib/demoData';
 
 const CommunitySection: React.FC = () => {
+  const { t } = useLanguage();
+
   // Format discussions for display
   const discussions = DEMO_DISCUSSIONS.map(discussion => ({
     id: discussion.id,
