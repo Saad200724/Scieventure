@@ -58,41 +58,73 @@ export const initializeOfflineStorage = (): Promise<void> => {
 // Save content to IndexedDB for offline use
 export const saveOfflineContent = async (content: OfflineContent): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open("SciVentureOfflineDB", 1);
+    try {
+      const request = window.indexedDB.open("SciVentureOfflineDB", 1);
 
-    request.onerror = () => {
-      console.error("Failed to open offline database");
-      reject(false);
-    };
-
-    request.onsuccess = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      
-      // Choose the correct object store based on content type
-      const storeName = content.type === 'document' ? "documents" : "videos";
-      
-      // Start a transaction
-      const transaction = db.transaction([storeName], "readwrite");
-      const store = transaction.objectStore(storeName);
-      
-      // Add the content to the store
-      const addRequest = store.put(content);
-      
-      addRequest.onsuccess = () => {
-        // Also update the metadata in localStorage for quicker access
+      request.onerror = () => {
+        console.error("Failed to open offline database");
+        // Fallback to localStorage only
         updateLocalStorageMetadata(content);
         resolve(true);
       };
-      
-      addRequest.onerror = () => {
-        console.error("Failed to save offline content");
-        reject(false);
+
+      request.onsuccess = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        
+        // Choose the correct object store based on content type
+        const storeName = content.type === 'document' ? "documents" : "videos";
+        
+        try {
+          // Start a transaction
+          const transaction = db.transaction([storeName], "readwrite");
+          const store = transaction.objectStore(storeName);
+          
+          // Add the content to the store
+          const addRequest = store.put(content);
+          
+          addRequest.onsuccess = () => {
+            // Also update the metadata in localStorage for quicker access
+            updateLocalStorageMetadata(content);
+            resolve(true);
+          };
+          
+          addRequest.onerror = () => {
+            console.error("Failed to save offline content");
+            updateLocalStorageMetadata(content);
+            resolve(true);
+          };
+          
+          transaction.oncomplete = () => {
+            db.close();
+          };
+        } catch (e) {
+          console.error("Transaction error:", e);
+          // Fallback to localStorage
+          updateLocalStorageMetadata(content);
+          resolve(true);
+        }
       };
-      
-      transaction.oncomplete = () => {
-        db.close();
+
+      request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        
+        // Create object stores (tables) for documents and videos
+        if (!db.objectStoreNames.contains("documents")) {
+          db.createObjectStore("documents", { keyPath: "id" });
+          console.log("Created documents store");
+        }
+        
+        if (!db.objectStoreNames.contains("videos")) {
+          db.createObjectStore("videos", { keyPath: "id" });
+          console.log("Created videos store");
+        }
       };
-    };
+    } catch (e) {
+      console.error("Failed to access IndexedDB:", e);
+      // Fallback to localStorage
+      updateLocalStorageMetadata(content);
+      resolve(true);
+    }
   });
 };
 
@@ -112,47 +144,62 @@ export const loadOfflineContentMetadata = async (type: 'document' | 'video'): Pr
   
   // If nothing in localStorage, get from IndexedDB
   return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open("SciVentureOfflineDB", 1);
-    
-    request.onerror = () => {
-      console.error("Failed to open offline database");
-      resolve([]);
-    };
-    
-    request.onsuccess = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      const storeName = type === 'document' ? "documents" : "videos";
+    try {
+      const request = window.indexedDB.open("SciVentureOfflineDB", 1);
       
-      try {
-        const transaction = db.transaction([storeName], "readonly");
-        const store = transaction.objectStore(storeName);
-        const getAllRequest = store.getAll();
-        
-        getAllRequest.onsuccess = () => {
-          const items = getAllRequest.result.map(item => {
-            // Don't include the binary data in metadata
-            const { data, ...metadata } = item;
-            return metadata;
-          });
-          
-          // Cache the metadata in localStorage
-          localStorage.setItem(storageKey, JSON.stringify(items));
-          resolve(items);
-        };
-        
-        getAllRequest.onerror = () => {
-          console.error(`Failed to get ${type} list`);
-          resolve([]);
-        };
-        
-        transaction.oncomplete = () => {
-          db.close();
-        };
-      } catch (e) {
-        console.error("Transaction error:", e);
+      request.onerror = () => {
+        console.error("Failed to open offline database");
         resolve([]);
-      }
-    };
+      };
+      
+      request.onsuccess = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        const storeName = type === 'document' ? "documents" : "videos";
+        
+        try {
+          const transaction = db.transaction([storeName], "readonly");
+          const store = transaction.objectStore(storeName);
+          const getAllRequest = store.getAll();
+          
+          getAllRequest.onsuccess = () => {
+            const items = getAllRequest.result.map(item => {
+              // Don't include the binary data in metadata
+              const { data, ...metadata } = item;
+              return metadata;
+            });
+            
+            // Cache the metadata in localStorage
+            localStorage.setItem(storageKey, JSON.stringify(items));
+            resolve(items);
+          };
+          
+          getAllRequest.onerror = () => {
+            console.error(`Failed to get ${type} list`);
+            resolve([]);
+          };
+          
+          transaction.oncomplete = () => {
+            db.close();
+          };
+        } catch (e) {
+          console.error("Transaction error:", e);
+          resolve([]);
+        }
+      };
+
+      request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        if (!db.objectStoreNames.contains("documents")) {
+          db.createObjectStore("documents", { keyPath: "id" });
+        }
+        if (!db.objectStoreNames.contains("videos")) {
+          db.createObjectStore("videos", { keyPath: "id" });
+        }
+      };
+    } catch (e) {
+      console.error("Failed to access IndexedDB:", e);
+      resolve([]);
+    }
   });
 };
 

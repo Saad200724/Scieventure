@@ -35,11 +35,13 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ module }) => {
 
   return (
     <Card className="overflow-hidden flex flex-col h-full">
-      <img
-        src={thumbnail}
-        alt={title}
-        className="w-full h-auto"
-      />
+      <div className="w-full bg-gray-100 flex items-center justify-center min-h-40">
+        <img
+          src={thumbnail}
+          alt={title}
+          className="w-full h-full object-contain"
+        />
+      </div>
       <div className="p-5 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-2">
           <span className={`text-xs ${subjectStyle.bgColor} ${subjectStyle.textColor} px-2 py-1 rounded-full`}>
