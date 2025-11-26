@@ -17,8 +17,9 @@ import Projects from "@/pages/Projects";
 import Resources from "@/pages/Resources";
 import Modules from "@/pages/Modules";
 import Community from "@/pages/Community";
-import Curio from "@/pages/Curio";
+import Curio from "@/pages/Curio-Premium";
 import OfflineContent from "@/pages/OfflineContent";
+import ProjectDetail from "@/pages/ProjectDetail";
 import { ROUTES } from "@/lib/constants";
 import { supabase, getSession } from "@/lib/supabase";
 import { Brain } from "lucide-react";
@@ -188,6 +189,13 @@ function App() {
                 <Route path={ROUTES.community}>
                   {() => (
                     isAuthenticated ? <Community /> : <Redirect to="/login" />
+                  )}
+                </Route>
+                
+                {/* Project Detail Page */}
+                <Route path="/projects/:id">
+                  {() => (
+                    isAuthenticated ? <ProjectDetail /> : <Redirect to="/login" />
                   )}
                 </Route>
                 

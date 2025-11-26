@@ -154,6 +154,40 @@ export const insertChatMessageSchema = createInsertSchema(chatMessages).pick({
   response: true,
 });
 
+// Project Comments (Collaboration)
+export const projectComments = pgTable("project_comments", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull(),
+  userId: integer("user_id").notNull(),
+  userName: text("user_name"),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertProjectCommentSchema = createInsertSchema(projectComments).pick({
+  projectId: true,
+  userId: true,
+  userName: true,
+  content: true,
+});
+
+// Project Participants (Collaboration)
+export const projectParticipants = pgTable("project_participants", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull(),
+  userId: integer("user_id").notNull(),
+  userName: text("user_name"),
+  role: text("role").default("participant"),
+  joinedAt: timestamp("joined_at").defaultNow(),
+});
+
+export const insertProjectParticipantSchema = createInsertSchema(projectParticipants).pick({
+  projectId: true,
+  userId: true,
+  userName: true,
+  role: true,
+});
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -175,3 +209,9 @@ export type InsertResource = z.infer<typeof insertResourceSchema>;
 
 export type ChatMessage = typeof chatMessages.$inferSelect;
 export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
+
+export type ProjectComment = typeof projectComments.$inferSelect;
+export type InsertProjectComment = z.infer<typeof insertProjectCommentSchema>;
+
+export type ProjectParticipant = typeof projectParticipants.$inferSelect;
+export type InsertProjectParticipant = z.infer<typeof insertProjectParticipantSchema>;
