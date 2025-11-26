@@ -52,9 +52,6 @@ export default function CurioPremium() {
     }
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!input.trim() || !userId) return;
