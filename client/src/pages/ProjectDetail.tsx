@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useRoute } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { Send, Users, MessageSquare, Star, Clock, MapPin, Share2 } from "lucide-react";
+import { DEMO_PROJECTS } from "@/lib/demoData";
 
 interface Comment {
   id: string;
@@ -39,21 +40,44 @@ export default function ProjectDetail() {
     { id: "2", name: "Maliha Hasan", role: "Contributor", avatar: "👩‍🔬", joinedAt: new Date() },
   ]);
   const [commentInput, setCommentInput] = useState("");
+  const [hasJoined, setHasJoined] = useState(false);
 
-  // Mock project data
-  const project = {
-    id: params?.id || "1",
-    title: "Climate Monitoring Bangladesh",
-    description: "Monitor temperature, rainfall, and air quality across Bangladesh regions to contribute to climate research.",
-    subject: "Environmental Science",
-    participationType: "Group",
-    difficulty: 2,
-    location: "All Bangladesh",
-    endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-    participants: 24,
-    status: "Active",
-    image: "☁️",
-  };
+  // Get project data from demo data
+  const project = useMemo(() => {
+    const projectId = params?.id ? parseInt(params.id) : 1;
+    const demoProject = DEMO_PROJECTS.find(p => p.id === projectId);
+    
+    if (demoProject) {
+      return {
+        id: demoProject.id,
+        title: demoProject.title,
+        description: demoProject.description,
+        subject: demoProject.subject,
+        participationType: demoProject.participationType,
+        difficulty: demoProject.difficulty,
+        location: demoProject.location,
+        endDate: demoProject.endDate,
+        participants: demoProject.participants.length,
+        status: demoProject.status,
+        image: "🔬",
+      };
+    }
+    
+    // Fallback data
+    return {
+      id: projectId,
+      title: "Climate Monitoring Bangladesh",
+      description: "Monitor temperature, rainfall, and air quality across Bangladesh regions to contribute to climate research.",
+      subject: "Environmental Science",
+      participationType: "Group",
+      difficulty: 2,
+      location: "All Bangladesh",
+      endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+      participants: 24,
+      status: "Active",
+      image: "☁️",
+    };
+  }, [params?.id]);
 
   const addComment = () => {
     if (!commentInput.trim()) return;
@@ -69,7 +93,8 @@ export default function ProjectDetail() {
   };
 
   const joinProject = () => {
-    alert("You have joined the project!");
+    setHasJoined(true);
+    alert("You have successfully joined the project! 🎉");
   };
 
   return (
@@ -92,8 +117,13 @@ export default function ProjectDetail() {
               </div>
             </div>
           </div>
-          <Button className="bg-gradient-to-r from-blue-500 to-cyan-500" onClick={joinProject}>
-            Join Project
+          <Button 
+            className={`bg-gradient-to-r ${hasJoined ? 'from-green-500 to-emerald-500' : 'from-blue-500 to-cyan-500'}`} 
+            onClick={joinProject}
+            disabled={hasJoined}
+            data-testid="button-join-project-detail"
+          >
+            {hasJoined ? '✓ Joined' : 'Join Project'}
           </Button>
         </div>
 

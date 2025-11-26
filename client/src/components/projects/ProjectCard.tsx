@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'wouter';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin } from 'lucide-react';
@@ -89,13 +90,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             ))}
           </div>
         </div>
-        <Button
-          className={buttonStyle}
-          size="sm"
-          disabled={participationType !== 'Open Participation'}
-        >
-          {participationType === 'Open Participation' ? 'Join Project' : 'Request Invite'}
-        </Button>
+        <Link href={`/projects/${id}`}>
+          <Button
+            className={buttonStyle}
+            size="sm"
+            disabled={participationType !== 'Open Participation'}
+            data-testid={`button-join-project-${id}`}
+          >
+            {participationType === 'Open Participation' ? 'Join Project' : 'Request Invite'}
+          </Button>
+        </Link>
       </div>
     </Card>
   );
