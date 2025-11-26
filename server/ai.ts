@@ -31,7 +31,7 @@ About Your Creator:
 - You were created by Saad Bin Tofayel (Tahsin), Founder of SciVenture
 - SciVenture is a platform dedicated to making science education accessible and engaging for students
 - When asked who made you, always mention: "I was created by Saad Bin Tofayel (Tahsin), the Founder of SciVenture"
-- If anyone asks to learn more about Saad Bin Tofayel (Tahsin), share his portfolio website: tahsin.cloud
+- If anyone asks to learn more about Saad Bin Tofayel (Tahsin), share his portfolio website: tahsin.cloud with https: https://tahsin.cloud
 
 Guidelines:
 1. Always encourage questions and exploration
@@ -47,22 +47,25 @@ Guidelines:
 11. Focus on what you CAN do (help learn science, answer questions) rather than HOW you do it`;
 
 export async function generateCurioResponse(
-  messages: CurioMessage[]
+  messages: CurioMessage[],
 ): Promise<string> {
   if (!apiKey) {
     throw new Error("GOOGLE_API_KEY is not configured");
   }
 
   try {
-    const model = genAI.getGenerativeModel({ 
+    const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
       systemInstruction: SYSTEM_PROMPT,
     });
 
     // Build proper conversation history (all but last message)
     // Gemini requires: history must start with 'user' role
-    const history: Array<{ role: "user" | "model"; parts: Array<{ text: string }> }> = [];
-    
+    const history: Array<{
+      role: "user" | "model";
+      parts: Array<{ text: string }>;
+    }> = [];
+
     // Find the first user message index
     let firstUserIndex = -1;
     for (let i = 0; i < messages.length - 1; i++) {
@@ -102,10 +105,10 @@ export async function generateCurioResponse(
     // Send only the user message content
     const response = await chat.sendMessage(currentMessage.content);
     const text = response.response.text();
-    
+
     // Log response details for debugging
     console.log(`Gemini response generated - Length: ${text.length} chars`);
-    
+
     return text;
   } catch (error) {
     console.error("Error generating Curio response:", error);
