@@ -5,97 +5,39 @@ import { ChevronRight, MessageSquare, Eye, Calendar, MapPin, Clock } from 'lucid
 import { SUBJECT_TAGS } from '@/lib/constants';
 import { formatDate } from '@/lib/utils/dataUtils';
 import SimulationGames from './SimulationGames';
+import { DEMO_DISCUSSIONS, DEMO_EVENTS, DEMO_CONTRIBUTORS } from '@/lib/demoData';
 
 const CommunitySection: React.FC = () => {
-  // Mock data for discussions
-  const discussions = [
-    {
-      id: 1,
-      authorName: 'Mahir Ahmed',
-      authorInitials: 'MA',
-      timestamp: new Date(Date.now() - 7200000), // 2 hours ago
-      subject: 'Physics',
-      title: 'Understanding wave-particle duality in quantum mechanics',
-      content: "I'm having trouble grasping the concept of how light can behave both as a wave and a particle. Can someone explain this in simpler terms?",
-      replyCount: 8,
-      viewCount: 56
-    },
-    {
-      id: 2,
-      authorName: 'Fatima Jahan',
-      authorInitials: 'FJ',
-      timestamp: new Date(Date.now() - 86400000), // 1 day ago
-      subject: 'Biology',
-      title: 'Local plant species identification help',
-      content: "I've been documenting plant species in my area for our biodiversity project. Can anyone help identify these specimens from the Sundarbans region?",
-      replyCount: 15,
-      viewCount: 89
-    }
-  ];
+  // Format discussions for display
+  const discussions = DEMO_DISCUSSIONS.map(discussion => ({
+    id: discussion.id,
+    authorName: discussion.author,
+    authorInitials: discussion.author.split(' ').map(n => n[0]).join(''),
+    timestamp: new Date(discussion.timestamp),
+    subject: discussion.subject || 'General',
+    title: discussion.title,
+    content: '',
+    replyCount: discussion.replies,
+    viewCount: discussion.views
+  }));
 
-  // Mock data for events
-  const events = [
-    {
-      id: 1,
-      title: 'National Science Fair 2023',
-      location: 'Dhaka University Campus',
-      date: new Date('2023-06-24'),
-      time: '9:00 AM - 5:00 PM'
-    },
-    {
-      id: 2,
-      title: 'Astronomy Night',
-      location: 'Chittagong Science Museum',
-      date: new Date('2023-06-30'),
-      time: '7:00 PM - 10:00 PM'
-    },
-    {
-      id: 3,
-      title: 'Environmental Science Workshop',
-      location: 'Virtual Event',
-      date: new Date('2023-07-05'),
-      time: '2:00 PM - 4:00 PM'
-    }
-  ];
+  // Format events for display
+  const events = DEMO_EVENTS.map(event => ({
+    id: event.id,
+    title: event.title,
+    location: event.location,
+    date: event.date,
+    time: event.time
+  }));
 
-  // Mock data for contributors
-  const contributors = [
-    {
-      id: 1,
-      name: 'Rahman Siddiqui',
-      role: 'Physics Teacher',
-      initials: 'RS',
-      points: 972
-    },
-    {
-      id: 2,
-      name: 'Nusrat Khan',
-      role: 'Biology Researcher',
-      initials: 'NK',
-      points: 845
-    },
-    {
-      id: 3,
-      name: 'Anika Hossain',
-      role: 'Student',
-      initials: 'AH',
-      points: 783
-    },
-    {
-      id: 4,
-      name: 'Kamal Islam',
-      role: 'Chemistry Enthusiast',
-      initials: 'KI',
-      points: 756
-    },
-    {
-      id: 5,
-      name: 'Sabina Rahman',
-      role: 'Math Teacher',
-      initials: 'SR',
-      points: 721
-    }
-  ];
+  // Use contributors from demo data
+  const contributors = DEMO_CONTRIBUTORS.map(contributor => ({
+    id: contributor.id,
+    name: contributor.name,
+    role: contributor.role,
+    initials: contributor.initials,
+    points: contributor.points
+  }));
 
   return (
     <section className="mb-12">
