@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/providers/LanguageProvider';
 import { Trash2, Play, FileText, Eye, Download } from 'lucide-react';
 import { Link } from 'wouter';
+import { loadOfflineContentMetadata, deleteOfflineContent, OfflineContent as OfflineContentType } from '@/lib/offlineStorage';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -19,17 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 // Type definitions for offline content
-interface OfflineResource {
-  id: number;
-  title: string;
-  description: string;
-  subject: string;
-  fileSize: string;
-  thumbnail: string;
-  downloadDate: string;
-  url: string;
-  type: 'document' | 'video';
-}
+interface OfflineResource extends OfflineContentType {}
 
 const OfflineContent: React.FC = () => {
   const { t } = useLanguage();
@@ -38,6 +29,7 @@ const OfflineContent: React.FC = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<OfflineResource | null>(null);
   const [activeTab, setActiveTab] = useState("documents");
+  const [isLoading, setIsLoading] = useState(true);
   
   // Scroll to top when tab changes
   useEffect(() => {
@@ -46,24 +38,24 @@ const OfflineContent: React.FC = () => {
   
   // Load offline content from localStorage/IndexedDB on component mount
   useEffect(() => {
-    // Load saved resources from localStorage
-    const savedResources = localStorage.getItem('offlineResources');
-    if (savedResources) {
+    const loadContent = async () => {
+      setIsLoading(true);
       try {
-        setOfflineResources(JSON.parse(savedResources));
+        // Load documents from the proper storage
+        const documents = await loadOfflineContentMetadata('document');
+        setOfflineResources(documents);
+        
+        // Load videos from the proper storage
+        const videos = await loadOfflineContentMetadata('video');
+        setOfflineVideos(videos);
       } catch (e) {
-        console.error('Error parsing offline resources:', e);
+        console.error('Error loading offline content:', e);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
     
-    const savedVideos = localStorage.getItem('offlineVideos');
-    if (savedVideos) {
-      try {
-        setOfflineVideos(JSON.parse(savedVideos));
-      } catch (e) {
-        console.error('Error parsing offline videos:', e);
-      }
-    }
+    loadContent();
   }, []);
   
   // Delete an offline item
@@ -73,23 +65,22 @@ const OfflineContent: React.FC = () => {
   };
   
   // Confirm deletion of an offline item
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!itemToDelete) return;
     
-    if (itemToDelete.type === 'document') {
-      const updatedResources = offlineResources.filter(r => r.id !== itemToDelete.id);
-      setOfflineResources(updatedResources);
-      localStorage.setItem('offlineResources', JSON.stringify(updatedResources));
+    try {
+      // Delete from IndexedDB and update localStorage
+      await deleteOfflineContent(itemToDelete.id, itemToDelete.type);
       
-      // Also remove the actual file from IndexedDB if applicable
-      // This would require integration with IndexedDB API
-      
-    } else if (itemToDelete.type === 'video') {
-      const updatedVideos = offlineVideos.filter(v => v.id !== itemToDelete.id);
-      setOfflineVideos(updatedVideos);
-      localStorage.setItem('offlineVideos', JSON.stringify(updatedVideos));
-      
-      // Also remove the actual video file from IndexedDB if applicable
+      if (itemToDelete.type === 'document') {
+        const updatedResources = offlineResources.filter(r => r.id !== itemToDelete.id);
+        setOfflineResources(updatedResources);
+      } else if (itemToDelete.type === 'video') {
+        const updatedVideos = offlineVideos.filter(v => v.id !== itemToDelete.id);
+        setOfflineVideos(updatedVideos);
+      }
+    } catch (e) {
+      console.error('Error deleting offline content:', e);
     }
     
     setShowDeleteDialog(false);
