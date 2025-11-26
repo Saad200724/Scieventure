@@ -354,6 +354,51 @@ export const DEMO_EVENTS = [
     time: "8:00 AM - 6:00 PM",
     location: "Multiple Centers",
     description: "Annual physics competition for all grades"
+  },
+  {
+    id: 6,
+    title: "Marine Biology Expedition",
+    date: new Date(Date.now() + 38 * 24 * 60 * 60 * 1000),
+    dateStr: "Jul 22",
+    time: "6:00 AM - 4:00 PM",
+    location: "Sundarban Delta",
+    description: "Explore marine ecosystems and species conservation"
+  },
+  {
+    id: 7,
+    title: "Mathematics Problem-Solving Challenge",
+    date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+    dateStr: "Jul 28",
+    time: "1:00 PM - 5:00 PM",
+    location: "Sylhet Science Center",
+    description: "Competitive mathematics problems and solutions workshop"
+  },
+  {
+    id: 8,
+    title: "Robotics Engineering Summit",
+    date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
+    dateStr: "Aug 3",
+    time: "10:00 AM - 4:00 PM",
+    location: "Bangladesh Institute of Technology",
+    description: "Advanced robotics design and programming showcase"
+  },
+  {
+    id: 9,
+    title: "Climate Change Awareness Seminar",
+    date: new Date(Date.now() + 32 * 24 * 60 * 60 * 1000),
+    dateStr: "Aug 8",
+    time: "3:00 PM - 6:00 PM",
+    location: "Online Webinar",
+    description: "Scientists discuss climate impacts and solutions"
+  },
+  {
+    id: 10,
+    title: "Genetics and Heredity Workshop",
+    date: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+    dateStr: "Aug 15",
+    time: "9:00 AM - 12:00 PM",
+    location: "Rajshahi University",
+    description: "Explore DNA, inheritance patterns, and modern genetics"
   }
 ];
 
@@ -406,5 +451,61 @@ export const DEMO_CONTRIBUTORS = [
     role: "Science Educator",
     points: 667,
     initials: "MH"
+  },
+  {
+    id: 8,
+    name: "Tariq Hassan",
+    role: "Engineering Expert",
+    points: 645,
+    initials: "TH"
+  },
+  {
+    id: 9,
+    name: "Zainab Ali",
+    role: "Astronomy Specialist",
+    points: 623,
+    initials: "ZA"
+  },
+  {
+    id: 10,
+    name: "Ravi Kumar",
+    role: "Robotics Mentor",
+    points: 612,
+    initials: "RK"
+  },
+  {
+    id: 11,
+    name: "Priya Das",
+    role: "Data Science Instructor",
+    points: 598,
+    initials: "PD"
+  },
+  {
+    id: 12,
+    name: "Sonia Patel",
+    role: "Wildlife Conservationist",
+    points: 587,
+    initials: "SP"
+  },
+  {
+    id: 13,
+    name: "Dimitri Volkov",
+    role: "Physics Researcher",
+    points: 576,
+    initials: "DV"
+  },
+  {
+    id: 14,
+    name: "Emma Chen",
+    role: "Biotechnology Expert",
+    points: 564,
+    initials: "EC"
+  },
+  {
+    id: 15,
+    name: "Omar Ibrahim",
+    role: "Educational Content Creator",
+    points: 543,
+    initials: "OI"
   }
 ];
