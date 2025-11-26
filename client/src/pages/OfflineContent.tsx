@@ -70,14 +70,18 @@ const OfflineContent: React.FC = () => {
     
     try {
       // Delete from IndexedDB and update localStorage
-      await deleteOfflineContent(itemToDelete.id, itemToDelete.type);
+      const success = await deleteOfflineContent(itemToDelete.id, itemToDelete.type);
       
-      if (itemToDelete.type === 'document') {
-        const updatedResources = offlineResources.filter(r => r.id !== itemToDelete.id);
-        setOfflineResources(updatedResources);
-      } else if (itemToDelete.type === 'video') {
-        const updatedVideos = offlineVideos.filter(v => v.id !== itemToDelete.id);
-        setOfflineVideos(updatedVideos);
+      if (success) {
+        if (itemToDelete.type === 'document') {
+          const updatedResources = offlineResources.filter(r => r.id !== itemToDelete.id);
+          setOfflineResources(updatedResources);
+        } else if (itemToDelete.type === 'video') {
+          const updatedVideos = offlineVideos.filter(v => v.id !== itemToDelete.id);
+          setOfflineVideos(updatedVideos);
+        }
+      } else {
+        console.error('Failed to delete offline content');
       }
     } catch (e) {
       console.error('Error deleting offline content:', e);

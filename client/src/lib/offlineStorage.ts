@@ -248,42 +248,52 @@ export const getOfflineContent = async (id: number, type: 'document' | 'video'):
 
 // Delete offline content
 export const deleteOfflineContent = async (id: number, type: 'document' | 'video'): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open("SciVentureOfflineDB", 1);
-    
-    request.onerror = () => {
-      console.error("Failed to open offline database");
-      reject(false);
-    };
-    
-    request.onsuccess = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      const storeName = type === 'document' ? "documents" : "videos";
+  return new Promise((resolve) => {
+    try {
+      const request = window.indexedDB.open("SciVentureOfflineDB", 1);
       
-      try {
-        const transaction = db.transaction([storeName], "readwrite");
-        const store = transaction.objectStore(storeName);
-        const deleteRequest = store.delete(id);
-        
-        deleteRequest.onsuccess = () => {
-          // Also update localStorage
-          removeFromLocalStorageMetadata(id, type);
-          resolve(true);
-        };
-        
-        deleteRequest.onerror = () => {
-          console.error(`Failed to delete ${type} with id ${id}`);
-          reject(false);
-        };
-        
-        transaction.oncomplete = () => {
-          db.close();
-        };
-      } catch (e) {
-        console.error("Transaction error:", e);
-        reject(false);
-      }
-    };
+      request.onerror = () => {
+        console.error("Failed to open offline database");
+        resolve(false);
+      };
+      
+      request.onsuccess = (event) => {
+        try {
+          const db = (event.target as IDBOpenDBRequest).result;
+          const storeName = type === 'document' ? "documents" : "videos";
+          
+          const transaction = db.transaction([storeName], "readwrite");
+          const store = transaction.objectStore(storeName);
+          const deleteRequest = store.delete(id);
+          
+          deleteRequest.onsuccess = () => {
+            console.log(`Successfully deleted ${type} with id ${id} from IndexedDB`);
+            // Also update localStorage
+            removeFromLocalStorageMetadata(id, type);
+            db.close();
+            resolve(true);
+          };
+          
+          deleteRequest.onerror = () => {
+            console.error(`Failed to delete ${type} with id ${id}:`, deleteRequest.error);
+            db.close();
+            resolve(false);
+          };
+          
+          transaction.onerror = () => {
+            console.error("Transaction error:", transaction.error);
+            db.close();
+            resolve(false);
+          };
+        } catch (e) {
+          console.error("Error in delete transaction:", e);
+          resolve(false);
+        }
+      };
+    } catch (e) {
+      console.error("Failed to access IndexedDB:", e);
+      resolve(false);
+    }
   });
 };
 
