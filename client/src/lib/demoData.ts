@@ -194,7 +194,7 @@ export const DEMO_RESOURCES = [
     downloadCount: 523,
     thumbnail: "/attached_assets/generated_images/biology_lab_manual_scientific.png",
     tags: ["lab", "manual", "practical"],
-    filePath: "/resources/bio-manual.pdf"
+    filePath: "/resources/resource-1.pdf"
   },
   {
     id: 2,
@@ -205,7 +205,7 @@ export const DEMO_RESOURCES = [
     downloadCount: 687,
     thumbnail: "/attached_assets/generated_images/chemistry_formula_handbook_reference.png",
     tags: ["formula", "reference", "handbook"],
-    filePath: "/resources/chem-handbook.pdf"
+    filePath: "/resources/resource-2.pdf"
   },
   {
     id: 3,
@@ -216,7 +216,7 @@ export const DEMO_RESOURCES = [
     downloadCount: 445,
     thumbnail: "/attached_assets/generated_images/physics_problem_guide_solutions.png",
     tags: ["formula", "problems", "solutions"],
-    filePath: "/resources/physics-guide.pdf"
+    filePath: "/resources/resource-3.pdf"
   },
   {
     id: 4,
@@ -227,7 +227,7 @@ export const DEMO_RESOURCES = [
     downloadCount: 891,
     thumbnail: "/attached_assets/generated_images/mathematics_cheat_sheet_formulas.png",
     tags: ["formula", "reference", "quick"],
-    filePath: "/resources/math-sheet.pdf"
+    filePath: "/resources/resource-4.pdf"
   },
   {
     id: 5,
@@ -238,7 +238,7 @@ export const DEMO_RESOURCES = [
     downloadCount: 334,
     thumbnail: "/attached_assets/generated_images/scientific_method_workbook_procedures.png",
     tags: ["worksheet", "practical", "methods"],
-    filePath: "/resources/method-workbook.pdf"
+    filePath: "/resources/resource-5.pdf"
   },
   {
     id: 6,
@@ -249,7 +249,7 @@ export const DEMO_RESOURCES = [
     downloadCount: 412,
     thumbnail: "/attached_assets/generated_images/environmental_science_guide_nature.png",
     tags: ["textbook", "reference", "guide"],
-    filePath: "/resources/env-guide.pdf"
+    filePath: "/resources/resource-6.pdf"
   }
 ];
 
