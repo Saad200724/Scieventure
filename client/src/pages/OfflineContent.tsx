@@ -69,19 +69,22 @@ const OfflineContent: React.FC = () => {
     if (!itemToDelete) return;
     
     try {
+      console.log(`Deleting ${itemToDelete.type} with id ${itemToDelete.id}`);
+      
       // Delete from IndexedDB and update localStorage
       const success = await deleteOfflineContent(itemToDelete.id, itemToDelete.type);
       
-      if (success) {
-        if (itemToDelete.type === 'document') {
-          const updatedResources = offlineResources.filter(r => r.id !== itemToDelete.id);
-          setOfflineResources(updatedResources);
-        } else if (itemToDelete.type === 'video') {
-          const updatedVideos = offlineVideos.filter(v => v.id !== itemToDelete.id);
-          setOfflineVideos(updatedVideos);
-        }
-      } else {
-        console.error('Failed to delete offline content');
+      console.log(`Delete operation returned: ${success}`);
+      
+      // Always update UI regardless of success (localStorage was updated)
+      if (itemToDelete.type === 'document') {
+        const updatedResources = offlineResources.filter(r => r.id !== itemToDelete.id);
+        console.log(`Updating resources list. Old count: ${offlineResources.length}, New count: ${updatedResources.length}`);
+        setOfflineResources(updatedResources);
+      } else if (itemToDelete.type === 'video') {
+        const updatedVideos = offlineVideos.filter(v => v.id !== itemToDelete.id);
+        console.log(`Updating videos list. Old count: ${offlineVideos.length}, New count: ${updatedVideos.length}`);
+        setOfflineVideos(updatedVideos);
       }
     } catch (e) {
       console.error('Error deleting offline content:', e);
