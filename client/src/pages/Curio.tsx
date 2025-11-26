@@ -25,13 +25,37 @@ interface UploadedFile {
 }
 
 export default function Curio() {
+  const { toast } = useToast();
+  const { language: contextLanguage } = useLanguage();
+  const language = contextLanguage === "english" ? "en" : "bn";
+  
+  // Get user's first name for greeting
+  const getInitialGreeting = () => {
+    let firstName = "Student";
+    try {
+      const storedSession = localStorage.getItem("supabase_session");
+      if (storedSession) {
+        const session = JSON.parse(storedSession);
+        const fullName = session.user?.user_metadata?.full_name;
+        if (fullName) {
+          firstName = fullName.split(' ')[0];
+        }
+      }
+    } catch (e) {
+      console.error("Error getting user name:", e);
+    }
+    return firstName;
+  };
+
+  const initialGreeting = getInitialGreeting();
+
   // Chat Tab State
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "assistant",
       content:
-        "Hello! I'm Curio, your science learning companion. I'm here to help you explore and understand science concepts. What would you like to learn about today?",
+        `Hello, ${initialGreeting}! I'm Curio, your science learning companion. I'm here to help you explore and understand science concepts. What would you like to learn about today?`,
       timestamp: new Date(),
     },
   ]);
@@ -47,10 +71,7 @@ export default function Curio() {
   // Research Tab State
   const [researchNotes, setResearchNotes] = useState<string>("");
   
-  const { toast } = useToast();
-  const { language: contextLanguage } = useLanguage();
   const [userId, setUserId] = useState<number | null>(null);
-  const language = contextLanguage === "english" ? "en" : "bn";
 
   useEffect(() => {
     const storedSession = localStorage.getItem("supabase_session");
