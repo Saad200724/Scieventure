@@ -150,6 +150,11 @@ const CommunitySection: React.FC = () => {
                   </div>
                 ))}
               </div>
+              <Link href="/contributors" className="mt-4 block">
+                <Button className="w-full text-primary hover:text-primary-dark hover:bg-primary/5" variant="ghost">
+                  {t("View top 100 contributors →", "শীর্ষ ১০০ অবদানকারী দেখুন →")}
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

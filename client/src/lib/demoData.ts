@@ -402,110 +402,25 @@ export const DEMO_EVENTS = [
   }
 ];
 
-export const DEMO_CONTRIBUTORS = [
-  {
-    id: 1,
-    name: "Rahman Siddiqui",
-    role: "Physics Teacher",
-    points: 972,
-    initials: "RS"
-  },
-  {
-    id: 2,
-    name: "Nusrat Khan",
-    role: "Biology Researcher",
-    points: 845,
-    initials: "NK"
-  },
-  {
-    id: 3,
-    name: "Anika Hossain",
-    role: "Student",
-    points: 783,
-    initials: "AH"
-  },
-  {
-    id: 4,
-    name: "Kamal Islam",
-    role: "Chemistry Enthusiast",
-    points: 756,
-    initials: "KI"
-  },
-  {
-    id: 5,
-    name: "Sabina Rahman",
-    role: "Math Teacher",
-    points: 721,
-    initials: "SR"
-  },
-  {
-    id: 6,
-    name: "Farhan Ahmed",
-    role: "Environmental Educator",
-    points: 698,
-    initials: "FA"
-  },
-  {
-    id: 7,
-    name: "Maliha Hasan",
-    role: "Science Educator",
-    points: 667,
-    initials: "MH"
-  },
-  {
-    id: 8,
-    name: "Tariq Hassan",
-    role: "Engineering Expert",
-    points: 645,
-    initials: "TH"
-  },
-  {
-    id: 9,
-    name: "Zainab Ali",
-    role: "Astronomy Specialist",
-    points: 623,
-    initials: "ZA"
-  },
-  {
-    id: 10,
-    name: "Ravi Kumar",
-    role: "Robotics Mentor",
-    points: 612,
-    initials: "RK"
-  },
-  {
-    id: 11,
-    name: "Priya Das",
-    role: "Data Science Instructor",
-    points: 598,
-    initials: "PD"
-  },
-  {
-    id: 12,
-    name: "Sonia Patel",
-    role: "Wildlife Conservationist",
-    points: 587,
-    initials: "SP"
-  },
-  {
-    id: 13,
-    name: "Dimitri Volkov",
-    role: "Physics Researcher",
-    points: 576,
-    initials: "DV"
-  },
-  {
-    id: 14,
-    name: "Emma Chen",
-    role: "Biotechnology Expert",
-    points: 564,
-    initials: "EC"
-  },
-  {
-    id: 15,
-    name: "Omar Ibrahim",
-    role: "Educational Content Creator",
-    points: 543,
-    initials: "OI"
-  }
-];
+export const DEMO_CONTRIBUTORS = Array.from({ length: 100 }, (_, i) => {
+  const names = ["Rahman", "Nusrat", "Anika", "Kamal", "Sabina", "Farhan", "Maliha", "Tariq", "Zainab", "Ravi", "Priya", "Sonia", "Dimitri", "Emma", "Omar", "Leena", "Arif", "Disha", "Hassan", "Jasmine"];
+  const lastNames = ["Siddiqui", "Khan", "Hossain", "Islam", "Rahman", "Ahmed", "Hasan", "Hassan", "Ali", "Kumar", "Das", "Patel", "Volkov", "Chen", "Ibrahim", "Nur", "Ahmed", "Roy", "Khan", "Malik"];
+  const roles = ["Physics Teacher", "Biology Researcher", "Student", "Chemistry Enthusiast", "Math Teacher", "Environmental Educator", "Science Educator", "Engineering Expert", "Astronomy Specialist", "Robotics Mentor", "Data Science Instructor", "Wildlife Conservationist", "Physics Researcher", "Biotechnology Expert", "Educational Content Creator"];
+  
+  const id = i + 1;
+  const firstNameIndex = i % names.length;
+  const lastNameIndex = (i + 5) % lastNames.length;
+  const roleIndex = i % roles.length;
+  
+  const name = `${names[firstNameIndex]} ${lastNames[lastNameIndex]}`;
+  const initials = `${names[firstNameIndex][0]}${lastNames[lastNameIndex][0]}`;
+  const points = Math.max(100, 1000 - i * 9);
+  
+  return {
+    id,
+    name,
+    role: roles[roleIndex],
+    points,
+    initials
+  };
+});
