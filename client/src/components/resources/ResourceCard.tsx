@@ -119,7 +119,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         description,
         subject,
         fileSize,
-        thumbnail: thumbnail || '/placeholder-resource.jpg',
+        thumbnail: thumbnail || '/attached_assets/generated_images/biology_lab_manual_scientific.png',
         downloadDate: new Date().toISOString(),
         url: URL.createObjectURL(blob), // Temporary URL for this session
         type: 'document',
@@ -152,7 +152,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         {/* Image - Full width on mobile, 1/3 width on larger screens */}
         <div className="sm:w-1/3 flex-shrink-0 bg-gray-100 flex items-center justify-center min-h-40 sm:min-h-0">
           <img 
-            src={thumbnail || '/placeholder-resource.jpg'} 
+            src={thumbnail || '/attached_assets/generated_images/biology_lab_manual_scientific.png'} 
             alt={title} 
             className="w-full h-full object-contain" 
           />
