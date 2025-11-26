@@ -137,7 +137,7 @@ const CommunitySection: React.FC = () => {
             <CardContent className="p-4 sm:p-6 h-full flex flex-col">
               <h3 className="font-semibold text-lg mb-4">Top Contributors</h3>
               <div className="space-y-3 flex-grow overflow-y-auto">
-                {contributors.map((contributor) => (
+                {contributors.slice(0, 16).map((contributor) => (
                   <div key={contributor.id} className="flex items-center justify-between gap-2">
                     <div className="flex items-center space-x-2 min-w-0 flex-grow">
                       <div className="h-8 w-8 rounded-full bg-blue-100 text-primary flex items-center justify-center text-xs font-semibold flex-shrink-0">
