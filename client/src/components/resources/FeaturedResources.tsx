@@ -4,15 +4,19 @@ import { Link } from 'wouter';
 import ResourceCard from './ResourceCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronRight } from 'lucide-react';
+import { DEMO_RESOURCES } from '@/lib/demoData';
 
 interface FeaturedResourcesProps {
   limit?: number;
 }
 
 const FeaturedResources: React.FC<FeaturedResourcesProps> = ({ limit = 2 }) => {
-  const { data: resources = [], isLoading } = useQuery({
+  const { data: apiResources, isLoading } = useQuery({
     queryKey: ['/api/resources'],
-  }) as { data: any[], isLoading: boolean };
+  });
+
+  // Use demo data as fallback if API returns empty
+  const resources = (apiResources && apiResources.length > 0) ? apiResources : DEMO_RESOURCES;
 
   return (
     <section className="mb-12">
@@ -52,7 +56,7 @@ const FeaturedResources: React.FC<FeaturedResourcesProps> = ({ limit = 2 }) => {
               </div>
             </div>
           ))
-        ) : resources && resources.length > 0 ? (
+        ) : resources.length > 0 ? (
           resources.slice(0, limit).map((resource: any) => (
             <ResourceCard key={resource.id} resource={resource} />
           ))
