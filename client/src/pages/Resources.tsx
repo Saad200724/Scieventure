@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ResourceCard from '@/components/resources/ResourceCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -67,6 +67,11 @@ const Resources: React.FC = () => {
     const subjects = new Set(resources.map((resource: Resource) => resource.subject));
     return Array.from(subjects);
   }, [resources]);
+
+  // Scroll to top when tab changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeTab]);
 
   return (
     <>

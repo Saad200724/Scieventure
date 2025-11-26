@@ -110,6 +110,11 @@ function App() {
     };
   }, []);
 
+  // Scroll to top when location changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location]);
+
   // Login handler
   const handleLogin = () => {
     // The actual authentication is handled by the Supabase auth listener

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useRef } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,12 @@ const OfflineContent: React.FC = () => {
   const [offlineVideos, setOfflineVideos] = useState<OfflineResource[]>([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<OfflineResource | null>(null);
+  const [activeTab, setActiveTab] = useState("documents");
+  
+  // Scroll to top when tab changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeTab]);
   
   // Load offline content from localStorage/IndexedDB on component mount
   useEffect(() => {
@@ -160,7 +167,7 @@ const OfflineContent: React.FC = () => {
           </Link>
         </div>
         
-        <Tabs defaultValue="documents" className="mb-12">
+        <Tabs defaultValue="documents" value={activeTab} onValueChange={setActiveTab} className="mb-12">
           <TabsList className="mb-6">
             <TabsTrigger value="documents">
               <FileText className="h-4 w-4 mr-2" />
