@@ -49,6 +49,50 @@ export default function Curio() {
 
   const initialGreeting = getInitialGreeting();
 
+  // Parse and format URLs in message content
+  const formatMessageWithLinks = (text: string) => {
+    // Regex to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts: (string | JSX.Element)[] = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+      // Add text before URL
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index));
+      }
+
+      const url = match[0];
+      // Extract domain name for link text
+      const urlObj = new URL(url);
+      const linkText = urlObj.hostname.replace('www.', '');
+
+      // Add clickable link
+      parts.push(
+        <a
+          key={`link-${match.index}`}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 dark:text-blue-400 underline hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+          data-testid="link-suggested"
+        >
+          {linkText}
+        </a>
+      );
+
+      lastIndex = urlRegex.lastIndex;
+    }
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   // Chat Tab State
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -297,7 +341,7 @@ export default function Curio() {
                       : "bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-border/50"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.role === "assistant" ? formatMessageWithLinks(message.content) : message.content}</p>
                   <p
                     className={`text-xs mt-2 font-medium ${
                       message.role === "user"
