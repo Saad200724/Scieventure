@@ -1,3 +1,21 @@
+// Import generated images
+import webOfLifeImg from '@assets/generated_images/web_of_life_ecosystem_forest.png';
+import photosynthesisImg from '@assets/generated_images/photosynthesis_plant_power_leaves.png';
+import atomicStructureImg from '@assets/generated_images/atomic_structure_basics_atoms.png';
+import chemicalReactionsImg from '@assets/generated_images/chemical_reactions_lab_experiment.png';
+import physicsMotionImg from '@assets/generated_images/physics_of_motion_forces.png';
+import energyHeatImg from '@assets/generated_images/energy_heat_transfer_waves.png';
+import bioLabImg from '@assets/generated_images/biology_lab_manual_scientific.png';
+import chemFormulaImg from '@assets/generated_images/chemistry_formula_handbook_reference.png';
+import physicsGuideImg from '@assets/generated_images/physics_problem_guide_solutions.png';
+import mathCheatImg from '@assets/generated_images/mathematics_cheat_sheet_formulas.png';
+import scientificMethodImg from '@assets/generated_images/scientific_method_workbook_procedures.png';
+import envScienceImg from '@assets/generated_images/environmental_science_guide_nature.png';
+import climateMonitoringImg from '@assets/generated_images/climate_monitoring_bangladesh_data.png';
+import airQualityImg from '@assets/generated_images/urban_air_quality_study_stations.png';
+import renewableEnergyImg from '@assets/generated_images/renewable_energy_research_sources.png';
+import biodiversityImg from '@assets/generated_images/biodiversity_survey_species.png';
+
 // Demo data for all pages
 export const DEMO_MODULES = [
   {
@@ -8,7 +26,7 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 45,
     lessons: 8,
-    thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
+    thumbnail: webOfLifeImg,
     rating: 4.8,
     studentCount: 1240,
     progress: 0
@@ -21,7 +39,7 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 60,
     lessons: 10,
-    thumbnail: "https://images.unsplash.com/photo-1530836369250-ef72a3649b8d?w=400&h=300&fit=crop",
+    thumbnail: photosynthesisImg,
     rating: 4.9,
     studentCount: 890,
     progress: 0
@@ -34,7 +52,7 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 50,
     lessons: 9,
-    thumbnail: "https://images.unsplash.com/photo-1610194352361-4bcd373ce5e1?w=400&h=300&fit=crop",
+    thumbnail: atomicStructureImg,
     rating: 4.7,
     studentCount: 1567,
     progress: 0
@@ -47,7 +65,7 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 75,
     lessons: 12,
-    thumbnail: "https://images.unsplash.com/photo-1530836369250-ef72a3649b8d?w=400&h=300&fit=crop",
+    thumbnail: chemicalReactionsImg,
     rating: 4.6,
     studentCount: 2034,
     progress: 0
@@ -60,7 +78,7 @@ export const DEMO_MODULES = [
     difficulty: 3,
     duration: 55,
     lessons: 11,
-    thumbnail: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop",
+    thumbnail: physicsMotionImg,
     rating: 4.9,
     studentCount: 1456,
     progress: 0
@@ -73,7 +91,7 @@ export const DEMO_MODULES = [
     difficulty: 2,
     duration: 50,
     lessons: 8,
-    thumbnail: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop",
+    thumbnail: energyHeatImg,
     rating: 4.8,
     studentCount: 934,
     progress: 0
@@ -95,7 +113,8 @@ export const DEMO_PROJECTS = [
       { firstName: "Farhan", lastName: "Ahmed", username: "fahmed", initials: "FA" }
     ],
     endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-    location: "All Bangladesh"
+    location: "All Bangladesh",
+    thumbnail: climateMonitoringImg
   },
   {
     id: 2,
@@ -111,7 +130,8 @@ export const DEMO_PROJECTS = [
       { firstName: "Leena", lastName: "Nur", username: "lnur", initials: "LN" }
     ],
     endDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-    location: "Major Cities"
+    location: "Major Cities",
+    thumbnail: airQualityImg
   },
   {
     id: 3,
@@ -127,7 +147,8 @@ export const DEMO_PROJECTS = [
       { firstName: "Rashid", lastName: "Khan", username: "rkhan", initials: "RK" }
     ],
     endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    location: "Rural Areas"
+    location: "Rural Areas",
+    thumbnail: renewableEnergyImg
   },
   {
     id: 4,
@@ -142,7 +163,8 @@ export const DEMO_PROJECTS = [
       { firstName: "Maliha", lastName: "Hasan", username: "mhasan", initials: "MH" }
     ],
     endDate: new Date(Date.now() + 75 * 24 * 60 * 60 * 1000),
-    location: "Various Regions"
+    location: "Various Regions",
+    thumbnail: biodiversityImg
   },
   {
     id: 5,
@@ -158,7 +180,8 @@ export const DEMO_PROJECTS = [
       { firstName: "Sabrina", lastName: "Rahman", username: "srahman", initials: "SR" }
     ],
     endDate: new Date(Date.now() + 55 * 24 * 60 * 60 * 1000),
-    location: "Local Sources"
+    location: "Local Sources",
+    thumbnail: airQualityImg
   },
   {
     id: 6,
@@ -173,7 +196,8 @@ export const DEMO_PROJECTS = [
       { firstName: "Nadia", lastName: "Jahan", username: "njahan", initials: "NJ" }
     ],
     endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000),
-    location: "All Bangladesh"
+    location: "All Bangladesh",
+    thumbnail: renewableEnergyImg
   }
 ];
 
@@ -185,7 +209,7 @@ export const DEMO_RESOURCES = [
     subject: "Biology",
     fileSize: "4.2 MB",
     downloadCount: 523,
-    thumbnail: "https://images.unsplash.com/photo-150784272343-583f20270319?w=400&h=300&fit=crop",
+    thumbnail: bioLabImg,
     tags: ["lab", "manual", "practical"],
     filePath: "/resources/bio-manual.pdf"
   },
@@ -196,7 +220,7 @@ export const DEMO_RESOURCES = [
     subject: "Chemistry",
     fileSize: "2.8 MB",
     downloadCount: 687,
-    thumbnail: "https://images.unsplash.com/photo-1530836369250-ef72a3649b8d?w=400&h=300&fit=crop",
+    thumbnail: chemFormulaImg,
     tags: ["formula", "reference", "handbook"],
     filePath: "/resources/chem-handbook.pdf"
   },
@@ -207,7 +231,7 @@ export const DEMO_RESOURCES = [
     subject: "Physics",
     fileSize: "3.5 MB",
     downloadCount: 445,
-    thumbnail: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop",
+    thumbnail: physicsGuideImg,
     tags: ["formula", "problems", "solutions"],
     filePath: "/resources/physics-guide.pdf"
   },
@@ -218,7 +242,7 @@ export const DEMO_RESOURCES = [
     subject: "Mathematics",
     fileSize: "1.9 MB",
     downloadCount: 891,
-    thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+    thumbnail: mathCheatImg,
     tags: ["formula", "reference", "quick"],
     filePath: "/resources/math-sheet.pdf"
   },
@@ -229,7 +253,7 @@ export const DEMO_RESOURCES = [
     subject: "General Science",
     fileSize: "5.1 MB",
     downloadCount: 334,
-    thumbnail: "https://images.unsplash.com/photo-1507842972194-ead604748b89?w=400&h=300&fit=crop",
+    thumbnail: scientificMethodImg,
     tags: ["worksheet", "practical", "methods"],
     filePath: "/resources/method-workbook.pdf"
   },
@@ -240,7 +264,7 @@ export const DEMO_RESOURCES = [
     subject: "Environmental Science",
     fileSize: "6.3 MB",
     downloadCount: 412,
-    thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
+    thumbnail: envScienceImg,
     tags: ["textbook", "reference", "guide"],
     filePath: "/resources/env-guide.pdf"
   }
