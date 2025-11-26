@@ -101,8 +101,8 @@ const SimulationGames: React.FC = () => {
 
   const [showAllGames, setShowAllGames] = useState(false);
   
-  // Only show the first two games initially
-  const displayedGames = showAllGames ? games : games.slice(0, 2);
+  // Show games - start with 3 games to fill the box better
+  const displayedGames = showAllGames ? games : games.slice(0, 3);
 
   return (
     <>

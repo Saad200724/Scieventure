@@ -279,6 +279,33 @@ export const DEMO_DISCUSSIONS = [
     replies: 12,
     views: 234,
     timestamp: "11/24/2025, 03:45 PM"
+  },
+  {
+    id: 4,
+    title: "How do plants adapt to different seasons?",
+    author: "Maliha Hasan",
+    subject: "Biology",
+    replies: 20,
+    views: 412,
+    timestamp: "11/23/2025, 02:30 PM"
+  },
+  {
+    id: 5,
+    title: "Best resources for learning environmental science?",
+    author: "Nusrat Khan",
+    subject: "Environmental Science",
+    replies: 6,
+    views: 98,
+    timestamp: "11/22/2025, 09:15 AM"
+  },
+  {
+    id: 6,
+    title: "Tips for solving complex calculus problems",
+    author: "Kamal Islam",
+    subject: "Mathematics",
+    replies: 18,
+    views: 267,
+    timestamp: "11/21/2025, 05:20 PM"
   }
 ];
 
@@ -372,5 +399,12 @@ export const DEMO_CONTRIBUTORS = [
     role: "Environmental Educator",
     points: 698,
     initials: "FA"
+  },
+  {
+    id: 7,
+    name: "Maliha Hasan",
+    role: "Science Educator",
+    points: 667,
+    initials: "MH"
   }
 ];
