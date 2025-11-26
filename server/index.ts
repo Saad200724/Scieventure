@@ -3,10 +3,15 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 // Import config to ensure environment variables are loaded first
 import "./config";
+import path from "path";
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
+
+// Serve static files from attached_assets directory
+const attachedAssetsPath = path.join(process.cwd(), 'attached_assets');
+app.use('/attached_assets', express.static(attachedAssetsPath));
 
 app.use((req, res, next) => {
   const start = Date.now();
